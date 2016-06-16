@@ -4,8 +4,11 @@ using System.Collections;
 public class BackgroundController : MonoBehaviour {
 	public Color StandardColor;
 	public Color ScoreColor;
+	public Color BreakColor;
 
 	Camera myCamera;
+
+	IEnumerator flashCoroutine;
 
 	// Use this for initialization
 	void Awake () {
@@ -23,10 +26,20 @@ public class BackgroundController : MonoBehaviour {
 
 	void HandleNamedEvent (string namedEvent) {
 		if (namedEvent == EventList.GOAL) {
-			StartCoroutine(FlashColor(ScoreColor));
+			CallFlashCoroutine(ScoreColor);
+		} else if (namedEvent == EventList.BRICK_BROKEN) {
+			CallFlashCoroutine(BreakColor);
 		}
 	}
 
+	void CallFlashCoroutine (Color color) {
+		if (flashCoroutine != null) {
+			StopCoroutine(flashCoroutine);
+		}
+
+		flashCoroutine = FlashColor(color);
+		StartCoroutine(flashCoroutine);
+	}
 	void Subscribe () {
 		EventControler.OnNamedEvent += HandleNamedEvent;
 	}

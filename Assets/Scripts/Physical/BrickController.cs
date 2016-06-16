@@ -20,6 +20,7 @@ public class BrickController : PhysicalObjectController {
 	}
 
 	void BreakBrick () {
+		EventControler.Event(EventList.BRICK_BROKEN);
 		animator.enabled = true;
 	}
 }
