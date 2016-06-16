@@ -12,17 +12,19 @@ public static class Vector2Util {
 	}
 
 	public static Vector2 MakeDiagonal (Vector2 vector, float max = 10.0f) {
-		while (Mathf.Floor(vector.x) == 0) {
+		
+		while (Mathf.Floor(vector.x) == 0 || Mathf.Ceil(vector.x) == 0) {
 			vector.x = Random.Range(-max, max);
 		}
 
-		while (Mathf.Floor(vector.y) == 0) {
+		while (Mathf.Floor(vector.y) == 0 || Mathf.Ceil(vector.y) == 0) {
 			vector.y = Random.Range(-max, max);
 		}
+
 		return vector;
 	}
 
-	public static Vector2 SpeedBoost (Vector2 vector, float boostModifier = 2) {
+	public static Vector2 SpeedBoost (Vector2 vector, float boostModifier = Global.SPEED_BOOST_MODIFIER) {
 		if (vector.x < Global.MIN_PUCK_SPEED && vector.y < Global.MIN_PUCK_SPEED) {
 			return vector * boostModifier;
 		} else {

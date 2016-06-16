@@ -71,15 +71,18 @@ public class PuckController : PhysicalObjectController {
 
 	void RandomStartingVelocity () {
 		rigibody.velocity = new Vector2 (
-			Random.Range (0, Global.MAX_PUCK_STARTING_SPEED),
-			Random.Range (0, Global.MAX_PUCK_STARTING_SPEED)
+			Random.Range (-Global.MAX_PUCK_STARTING_SPEED, Global.MAX_PUCK_STARTING_SPEED),
+			Random.Range (-Global.MAX_PUCK_STARTING_SPEED, Global.MAX_PUCK_STARTING_SPEED)
 		);
 	}
 
 	void OnCollisionEnter2D (Collision2D collision) {
+		EventControler.Event(collision.gameObject.tag);
+	}
+
+	void OnCollisionExit2D (Collision2D collision) {
 		PreventPerpendicularPaths();
 		MaintainMomentum();
-		EventControler.Event(collision.gameObject.tag);
 	}
 
 	// TODO: Add a more elegant scoring system
