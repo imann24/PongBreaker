@@ -10,14 +10,16 @@ public class PaddleController : PhysicalObjectController {
 	float speed = Global.BASE_PADDLE_SPEED;
 
 	void FixedUpdate () {
+		#if UNITY_STANDALONE || UNITY_EDITOR || UNITY_WEBGL
 		UpdateVelocity();
+		#endif
 	}
 		
 	void UpdateVelocity () {
 		rigibody.velocity = new Vector2(0, Input.GetAxis(PlayerUtil.IDToString(Player)) * speed);
 	}
 
-	#if UNITY_STANDALONE || UNITY_EDITOR
+	#if UNITY_STANDALONE || UNITY_EDITOR || UNITY_WEBGL
 	void OnMouseDown () {
 		SetOffset(DragUtil.GetMousePosition());
 	}

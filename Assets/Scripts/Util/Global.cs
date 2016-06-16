@@ -9,6 +9,7 @@
 	public const float BASE_PADDLE_SPEED = 9.5f;
 	public const float MAX_PUCK_STARTING_SPEED = 15.5f;
 	public const float MAX_PUCK_SPEED = 30f;
+	public const float MIN_PUCK_SPEED = 10f;
 	public const int BASE_GOAL_SCORE = 1;
 	public const float PUCK_RESPAWN_TIME = 3.0f;
 }

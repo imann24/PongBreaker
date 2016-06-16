@@ -65,6 +65,10 @@ public class PuckController : PhysicalObjectController {
 		rigibody.velocity = Vector2Util.MakeDiagonal(rigibody.velocity);
 	}
 
+	void MaintainMomentum () {
+		rigibody.velocity = Vector2Util.SpeedBoost(rigibody.velocity);
+	}
+
 	void RandomStartingVelocity () {
 		rigibody.velocity = new Vector2 (
 			Random.Range (0, Global.MAX_PUCK_STARTING_SPEED),
@@ -73,7 +77,8 @@ public class PuckController : PhysicalObjectController {
 	}
 
 	void OnCollisionEnter2D (Collision2D collision) {
-		rigibody.velocity = Vector2Util.MakeDiagonal(rigibody.velocity);
+		PreventPerpendicularPaths();
+		MaintainMomentum();
 		EventControler.Event(collision.gameObject.tag);
 	}
 

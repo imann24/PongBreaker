@@ -5,7 +5,8 @@ public class BrickSpawner : MonoBehaviour {
 	public GameObject BrickPrefab;
 
 	GameObject [] bricks;
-	Vector3 [] brickPositions;
+
+	public Sprite DefaultBrickSprite;
 
 	void Awake () {
 		Init();
@@ -36,26 +37,24 @@ public class BrickSpawner : MonoBehaviour {
 
 	void GenerateListOfBricks () {
 		bricks = new GameObject[transform.childCount];
-		brickPositions = new Vector3[transform.childCount];
 
 		for (int i = 0; i < transform.childCount; i++) {
 			bricks[i] = transform.GetChild(i).gameObject;
-			brickPositions[i] = bricks[i].transform.position;
 		}
 	}
 
 	void FillInDestroyedBricks () {
 		for (int i = 0; i < transform.childCount; i++) {
-			if (bricks[i] == null) {
-				bricks[i] = SpawnBrick(brickPositions[i]);
+			if (!bricks[i].activeSelf) {
+				SpawnBrick(bricks[i]);
 			}
 		}
 	}
 
-	GameObject SpawnBrick (Vector3 brickPosition) {
-		GameObject brick = (GameObject) Instantiate(BrickPrefab);
-		brick.transform.SetParent(transform);
-		brick.transform.position = brickPosition;
+	GameObject SpawnBrick (GameObject brick) {
+		brick.SetActive(true);
+		brick.GetComponent<Animator>().enabled = false;
+		brick.GetComponent<SpriteRenderer>().sprite = DefaultBrickSprite;
 		return brick;
 	}
 }
