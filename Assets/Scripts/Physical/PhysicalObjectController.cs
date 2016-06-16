@@ -3,6 +3,8 @@ using System.Collections;
 
 public class PhysicalObjectController : MonoBehaviour {
 	protected Rigidbody2D rigibody;
+	protected SpriteRenderer sprite;
+
 	// Use this for initialization
 	void Awake () {
 		SetReferences();
@@ -10,6 +12,7 @@ public class PhysicalObjectController : MonoBehaviour {
 
 	void SetReferences () {
 		rigibody = GetComponent<Rigidbody2D>();
+		sprite = GetComponent<SpriteRenderer>();
 	}
 
 	

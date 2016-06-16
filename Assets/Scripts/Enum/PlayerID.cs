@@ -1,4 +1,5 @@
 ﻿public enum PlayerID {
 	Left,
-	Right
+	Right,
+	None
 }
