@@ -31,7 +31,7 @@ public class BrickSpawner : MonoBehaviour {
 
 	void HandleNamedEvent (string eventName) {
 		if (eventName == EventList.GOAL) {
-			FillInDestroyedBricks();
+			StartCoroutine(FillInBricksOnDelay());
 		}
 	}
 
@@ -49,6 +49,11 @@ public class BrickSpawner : MonoBehaviour {
 				SpawnBrick(bricks[i]);
 			}
 		}
+	}
+
+	IEnumerator FillInBricksOnDelay (float timeDelay = 0.5f) {
+		yield return new WaitForSeconds(timeDelay);
+		FillInDestroyedBricks();
 	}
 
 	GameObject SpawnBrick (GameObject brick) {
