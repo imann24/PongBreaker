@@ -12,7 +12,7 @@ public static class SingletonUtil {
 	public static bool TryInit<T> (ref T singleton, T instance, GameObject gameObject) {
 		if (singleton == null) {
 			singleton = instance;
-			Object.DontDestroyOnLoad(gameObject);
+			Object.DontDestroyOnLoad(gameObject.transform.root);
 			return true;
 		} else {
 			Object.Destroy(gameObject);
