@@ -1,36 +1,36 @@
 ﻿public static class PlayerUtil {
 
-	public static string IDToString (PlayerID id) {
+	public static string IDToString (PaddlePosition id) {
 		switch (id) {
-		case PlayerID.Left:
+		case PaddlePosition.Left:
 			return Global.LEFT_PLAYER;
-		case PlayerID.Right:
+		case PaddlePosition.Right:
 			return Global.RIGHT_PLAYER;
 		default:
 			return null;
 		}
 	}
 
-	public static PlayerID GetPlayerFromGoalTag (string goalTag) {
+	public static PaddlePosition GetPlayerFromGoalTag (string goalTag) {
 		switch (goalTag) {
 		case Global.LEFT_PLAYER_GOAL:
-			return PlayerID.Left;
+			return PaddlePosition.Left;
 		case Global.RIGHT_PLAYER_GOAL:
-			return PlayerID.Right;
+			return PaddlePosition.Right;
 		default:
-			return PlayerID.None;
+			return PaddlePosition.None;
 		}
 
 	}
 
-	public static PlayerID GetOpponent (PlayerID id) {
+	public static PaddlePosition GetOpponent (PaddlePosition id) {
 		switch (id) {
-		case PlayerID.Left:
-			return PlayerID.Right;
-		case PlayerID.Right:
-			return PlayerID.Left;
+		case PaddlePosition.Left:
+			return PaddlePosition.Right;
+		case PaddlePosition.Right:
+			return PaddlePosition.Left;
 		default:
-			return PlayerID.None;
+			return PaddlePosition.None;
 		}
 	}
 }

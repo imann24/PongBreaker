@@ -35,6 +35,11 @@ public class PuckController : PhysicalObjectController {
 		StartCoroutine(TimedSpawnPuck(waitTime));
 	}
 
+	public float GetYPosition()
+	{
+		return transform.localPosition.y;
+	}
+
 	public void TogglePuck (bool active) {
 		sprite.enabled = active;
 		if (active) {
@@ -86,11 +91,11 @@ public class PuckController : PhysicalObjectController {
 	}
 
 	// TODO: Add a more elegant scoring system
-	int ScoreGoal (PlayerID scoringPlayer) {
+	int ScoreGoal (PaddlePosition scoringPlayer) {
 		return CalculateMultipliers(scoringPlayer) * Global.BASE_GOAL_SCORE;
 	}
 
-	int CalculateMultipliers (PlayerID scoringPlayer) {
+	int CalculateMultipliers (PaddlePosition scoringPlayer) {
 		return 1;
 	}
 }

@@ -7,9 +7,9 @@ using System.Collections.Generic;
 [RequireComponent(typeof(Text))]
 public class ScoreDisplayer : MonoBehaviour {
 
-	static Dictionary<PlayerID, ScoreDisplayer> InstancesByPlayer = new Dictionary<PlayerID, ScoreDisplayer>();
+	static Dictionary<PaddlePosition, ScoreDisplayer> InstancesByPlayer = new Dictionary<PaddlePosition, ScoreDisplayer>();
 
-	public PlayerID Player;
+	public PaddlePosition Player;
 	int score;
 	Text scoreText;
 
@@ -40,7 +40,7 @@ public class ScoreDisplayer : MonoBehaviour {
 		scoreText.text = score.ToString();
 	}
 
-	public static void ModifyScore (PlayerID player, int delta) {
+	public static void ModifyScore (PaddlePosition player, int delta) {
 		ScoreDisplayer score;
 		if (InstancesByPlayer.TryGetValue(player, out score)) {
 			score.UpdateScore(delta);

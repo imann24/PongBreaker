@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class ScoreController : MonoBehaviour {
 
-	Dictionary <PlayerID, int> scores = new Dictionary<PlayerID, int>();
+	Dictionary <PaddlePosition, int> scores = new Dictionary<PaddlePosition, int>();
 
 	void Awake () {
 		Init();
@@ -20,8 +20,8 @@ public class ScoreController : MonoBehaviour {
 	}
 
 	void InitScores () {
-		scores.Add(PlayerID.Left, 0);
-		scores.Add(PlayerID.Right, 0);
+		scores.Add(PaddlePosition.Left, 0);
+		scores.Add(PaddlePosition.Right, 0);
 	}
 
 	void Subscribe () {
@@ -33,9 +33,9 @@ public class ScoreController : MonoBehaviour {
 	}
 
 	void HandleNamedEvent (string eventName) {
-		PlayerID scoringPlayer = PlayerUtil.GetOpponent(PlayerUtil.GetPlayerFromGoalTag(eventName));
+		PaddlePosition scoringPlayer = PlayerUtil.GetOpponent(PlayerUtil.GetPlayerFromGoalTag(eventName));
 
-		if (scoringPlayer != PlayerID.None) {
+		if (scoringPlayer != PaddlePosition.None) {
 			int score = Score(scoringPlayer);
 			scores[scoringPlayer] += score;
 			ScoreDisplayer.ModifyScore(scoringPlayer, score);
@@ -43,12 +43,12 @@ public class ScoreController : MonoBehaviour {
 		}
 	}
 
-	int Score (PlayerID scoringPlayer) {
+	int Score (PaddlePosition scoringPlayer) {
 		return GetMultiplier(scoringPlayer) * Global.BASE_GOAL_SCORE;
 	}
 
 	// TODO: Add more
-	int GetMultiplier (PlayerID scoringPlayer) {
+	int GetMultiplier (PaddlePosition scoringPlayer) {
 		return 1;
 	}
 
