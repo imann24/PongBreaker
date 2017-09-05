@@ -15,6 +15,7 @@ public class GameplayController : SingletonBehaviour<GameplayController>
 	PuckController puck;
 
 	StateController state;
+	Game game;
 
 	protected override void Start()
 	{
@@ -23,7 +24,24 @@ public class GameplayController : SingletonBehaviour<GameplayController>
 		initialize(state.CurrentGame);
 	}
 
+	protected override void OnDestroy()
+	{
+		base.OnDestroy();
+		if(game != null)
+		{
+			unsubscribeEvents(game);
+		}
+	}
+
 	void initialize(Game game)
+	{
+		this.game = game;
+		subscribeEvents(game);
+		initializeGameType(game);
+		game.Play();
+	}
+
+	void initializeGameType(Game game)
 	{
 		switch(game.Type)
 		{
@@ -34,6 +52,35 @@ public class GameplayController : SingletonBehaviour<GameplayController>
 				initializePlayerVsPlayerGame();
 				break;
 		}
+	}
+
+	void subscribeEvents(Game game)
+	{
+		game.OnPause.Subscribe(pause);
+		game.OnResume.Subscribe(resume);
+		game.OnEnd.Subscribe(endGame);
+	}
+
+	void unsubscribeEvents(Game game)
+	{
+		game.OnPause.Unsubscribe(pause);
+		game.OnResume.Unsubscribe(resume);
+		game.OnEnd.Unsubscribe(endGame);
+	}
+
+	void pause()
+	{
+		pauseTime();
+	}
+
+	void resume()
+	{
+		resumeTime();
+	}
+
+	void endGame()
+	{
+		resumeTime();
 	}
 
 	void initializePlayerVsAIGame()

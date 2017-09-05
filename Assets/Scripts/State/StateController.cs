@@ -30,20 +30,28 @@ public class StateController : SingletonBehaviour<StateController>
 	{
 		this._currentGame = game;
 		scene.LoadScene(GameScene.Game);
+		game.Play();
+	}
+
+	public void LoadMainMenu()
+	{
+		scene.LoadScene(GameScene.MainMenu);
+		CurrentGame.End();
+	}
+
+	public void PauseGame(Game game)
+	{
+		game.Pause();
+	}
+
+	public void ResumeGame(Game game)
+	{
+		game.Resume();
 	}
 
 	protected override void Start()
 	{
 		base.Start();
 		this.scene = SceneController.Instance;
-	}
-
-	protected override void OnSceneLoad(int sceneIndex)
-	{
-		base.OnSceneLoad(sceneIndex);
-		if((GameScene) sceneIndex == GameScene.Game)
-		{
-
-		}
 	}
 }

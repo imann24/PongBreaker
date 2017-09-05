@@ -23,6 +23,14 @@ public class SingletonBehaviour<T> : MonoBehaviourExtended where T : class
 		private set;
 	}
 
+	protected bool isSingleton
+	{
+		get
+		{
+			return Instance == this as T;
+		}
+	}
+		
 	[SerializeField]
 	bool preserveOnSceneLoad = true;
 

@@ -1,23 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PhysicalObjectController : MonoBehaviour {
+public class PhysicalObjectController : MonoBehaviourExtended
+{
 	protected Rigidbody2D rigibody;
 	protected SpriteRenderer sprite;
 
 	// Use this for initialization
-	void Awake () {
+	protected override void Awake() 
+	{
+		base.Awake();
 		SetReferences();
 	}
 
-	void SetReferences () {
+	void SetReferences()
+	{
 		rigibody = GetComponent<Rigidbody2D>();
 		sprite = GetComponent<SpriteRenderer>();
-	}
-
-	
-	// Update is called once per frame
-	void Update () {
-	
 	}
 }

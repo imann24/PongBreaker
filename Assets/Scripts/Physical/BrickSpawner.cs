@@ -1,65 +1,70 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BrickSpawner : MonoBehaviour {
+public class BrickSpawner : MonoBehaviour 
+{
 	public GameObject BrickPrefab;
 
-	GameObject [] bricks;
+	BrickController[] bricks;
 
 	public Sprite DefaultBrickSprite;
 
-	void Awake () {
+	void Awake()
+	{
 		Init();
 	}
 
-	void Init () {
+	void Init()
+	{
 		Subscribe();
 		GenerateListOfBricks();
 	}
 
-	void OnDestroy () {
+	void OnDestroy()
+	{
 		Unsubscribe();
 	}
 	
-	void Subscribe () {
+	void Subscribe()
+	{
 		EventControler.OnNamedEvent += HandleNamedEvent;
 	}
 
-	void Unsubscribe () {
+	void Unsubscribe() 
+	{
 		EventControler.OnNamedEvent -= HandleNamedEvent;
 	}
 
-	void HandleNamedEvent (string eventName) {
-		if (eventName == EventList.GOAL) {
+	void HandleNamedEvent(string eventName) 
+	{
+		if(eventName == EventList.GOAL) 
+		{
 			StartCoroutine(FillInBricksOnDelay());
 		}
 	}
 
-	void GenerateListOfBricks () {
-		bricks = new GameObject[transform.childCount];
+	void GenerateListOfBricks() 
+	{
+		bricks = GetComponentsInChildren<BrickController>();
+	}
 
-		for (int i = 0; i < transform.childCount; i++) {
-			bricks[i] = transform.GetChild(i).gameObject;
+	void FillInDestroyedBricks()
+	{
+		foreach(BrickController brick in bricks)
+		{
+			SpawnBrick(brick);
 		}
 	}
 
-	void FillInDestroyedBricks () {
-		for (int i = 0; i < transform.childCount; i++) {
-			if (!bricks[i].activeSelf) {
-				SpawnBrick(bricks[i]);
-			}
-		}
-	}
-
-	IEnumerator FillInBricksOnDelay (float timeDelay = 0.5f) {
+	IEnumerator FillInBricksOnDelay(float timeDelay = 0.5f) 
+	{
 		yield return new WaitForSeconds(timeDelay);
 		FillInDestroyedBricks();
 	}
 
-	GameObject SpawnBrick (GameObject brick) {
-		brick.SetActive(true);
-		brick.GetComponent<Animator>().enabled = false;
-		brick.GetComponent<SpriteRenderer>().sprite = DefaultBrickSprite;
+	BrickController SpawnBrick(BrickController brick) 
+	{
+		brick.Spawn(DefaultBrickSprite);
 		return brick;
 	}
 }

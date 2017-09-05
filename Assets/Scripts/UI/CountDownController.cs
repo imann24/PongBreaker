@@ -3,35 +3,36 @@ using UnityEngine.UI;
 using System.Collections;
 
 [RequireComponent(typeof(Text))]
-public class CountDownController : MonoBehaviour {
-	public static CountDownController Instance;
-
+public class CountDownController : SingletonBehaviour<CountDownController> {
 	public int MaxTextSize = 200;
 	public int MinTextSize = 75;
 
-
 	Text countText;
 
-	bool hasInit;
-
 	// Use this for initialization
-	void Awake () {
-		if (SingletonUtil.TryInit(ref Instance, this, gameObject)) {
+	protected override void Awake()
+	{
+		base.Awake();
+		if(isSingleton)
+		{
 			Init();
-			hasInit = true;
 		}
 	}
 
-	void Init () {
+	void Init()
+	{
 		countText = GetComponent<Text>();
 		CountDownFrom();
 		Subscribe();
 	}
 
-	void OnDestroy () {
-		if (hasInit) {
+	protected override void OnDestroy()
+	{
+		if(isSingleton) 
+		{
 			Unsubscribe();
 		}
+		base.OnDestroy();
 	}
 
 	void Subscribe () {

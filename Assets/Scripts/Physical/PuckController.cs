@@ -1,32 +1,47 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PuckController : PhysicalObjectController {
-	
+public class PuckController : PhysicalObjectController 
+{
+	public bool IsAlive
+	{
+		get;
+		private set;
+	}
+
 	// Use this for initialization
-	void Start () {
+	protected override void Start() 
+	{
+		base.Start();
 		Init();
 	}
 
-	void Init () {
+	void Init() 
+	{
 		Subscribe();
 		SpawnPuck();
 	}
 
-	void OnDestroy () {
+	protected override void OnDestroy()
+	{
+		base.OnDestroy();
 		Unsubscribe();
 	}
 
-	void Subscribe () {
+	void Subscribe()
+	{
 		EventControler.OnNamedEvent += HandleNamedEvent;
 	}
 
-	void Unsubscribe () {
+	void Unsubscribe()
+	{
 		EventControler.OnNamedEvent -= HandleNamedEvent;
 	}
 
-	void HandleNamedEvent (string eventName) {
-		if (eventName == EventList.GOAL) {
+	void HandleNamedEvent(string eventName) 
+	{
+		if(eventName == EventList.GOAL) 
+		{
 			SpawnPuck(Global.PUCK_RESPAWN_TIME);
 		}
 	}
@@ -40,6 +55,11 @@ public class PuckController : PhysicalObjectController {
 		return transform.localPosition.y;
 	}
 
+	public float GetXPosition()
+	{
+		return transform.localPosition.x;
+	}
+
 	public void TogglePuck (bool active) {
 		sprite.enabled = active;
 		if (active) {
@@ -47,6 +67,7 @@ public class PuckController : PhysicalObjectController {
 		} else {
 			rigibody.Sleep();
 		}
+		IsAlive = active;
 	}
 
 	IEnumerator TimedSpawnPuck (float waitTime = 0) {
