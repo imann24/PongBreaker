@@ -1,38 +1,63 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PuckController : PhysicalObjectController {
-	
+public class PuckController : PhysicalObjectController 
+{
+	public bool IsAlive
+	{
+		get;
+		private set;
+	}
+
 	// Use this for initialization
-	void Start () {
+	protected override void Start() 
+	{
+		base.Start();
 		Init();
 	}
 
-	void Init () {
+	void Init() 
+	{
 		Subscribe();
 		SpawnPuck();
 	}
 
-	void OnDestroy () {
+	protected override void OnDestroy()
+	{
+		base.OnDestroy();
 		Unsubscribe();
 	}
 
-	void Subscribe () {
+	void Subscribe()
+	{
 		EventControler.OnNamedEvent += HandleNamedEvent;
 	}
 
-	void Unsubscribe () {
+	void Unsubscribe()
+	{
 		EventControler.OnNamedEvent -= HandleNamedEvent;
 	}
 
-	void HandleNamedEvent (string eventName) {
-		if (eventName == EventList.GOAL) {
+	void HandleNamedEvent(string eventName) 
+	{
+		if(eventName == EventList.GOAL) 
+		{
 			SpawnPuck(Global.PUCK_RESPAWN_TIME);
 		}
 	}
 
 	void SpawnPuck (float waitTime = Global.PUCK_RESPAWN_TIME) {
 		StartCoroutine(TimedSpawnPuck(waitTime));
+	}
+
+	public float GetYPosition()
+	{
+		return transform.localPosition.y;
+	}
+
+	public float GetXPosition()
+	{
+		return transform.localPosition.x;
 	}
 
 	public void TogglePuck (bool active) {
@@ -42,6 +67,7 @@ public class PuckController : PhysicalObjectController {
 		} else {
 			rigibody.Sleep();
 		}
+		IsAlive = active;
 	}
 
 	IEnumerator TimedSpawnPuck (float waitTime = 0) {
@@ -86,11 +112,11 @@ public class PuckController : PhysicalObjectController {
 	}
 
 	// TODO: Add a more elegant scoring system
-	int ScoreGoal (PlayerID scoringPlayer) {
+	int ScoreGoal (PaddlePosition scoringPlayer) {
 		return CalculateMultipliers(scoringPlayer) * Global.BASE_GOAL_SCORE;
 	}
 
-	int CalculateMultipliers (PlayerID scoringPlayer) {
+	int CalculateMultipliers (PaddlePosition scoringPlayer) {
 		return 1;
 	}
 }

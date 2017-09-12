@@ -2,39 +2,26 @@
 using UnityEngine.EventSystems;
 using System.Collections;
 
-public class PaddleController : PhysicalObjectController {
-	public PlayerID Player;
+public class PaddleController : PhysicalObjectController 
+{
+	protected PuckController puck;
 
-	Vector3 fingerOffset;
-
-	float speed = Global.BASE_PADDLE_SPEED;
-
-	void FixedUpdate () {
-		#if UNITY_STANDALONE || UNITY_EDITOR || UNITY_WEBGL
-		UpdateVelocity();
-		#endif
-	}
-		
-	void UpdateVelocity () {
-		rigibody.velocity = new Vector2(0, Input.GetAxis(PlayerUtil.IDToString(Player)) * speed);
+	public void Initialize(PuckController puck, PaddlePosition paddlePosition)
+	{
+		this.puck = puck;
+		this.paddlePosition = paddlePosition;
 	}
 
-	#if UNITY_STANDALONE || UNITY_EDITOR || UNITY_WEBGL
-	void OnMouseDown () {
-		SetOffset(DragUtil.GetMousePosition());
-	}
-		
-	void OnMouseDrag () {
-		DragPaddle(DragUtil.GetMousePosition());
-	}
-	#endif
-
-	public void SetOffset (Vector3 inputPosition) {
-		fingerOffset = inputPosition - transform.position;
+	protected PaddlePosition paddlePosition
+	{
+		get;
+		private set;
 	}
 
-	public void DragPaddle (Vector3 inputPosition) {
-		Vector3 newDragPosition = inputPosition - fingerOffset;
-		transform.position = new Vector3(transform.position.x, newDragPosition.y, transform.position.z);
+	protected float speed = Global.BASE_PADDLE_SPEED;
+
+	public override string ToString ()
+	{
+		return string.Format("[PaddleController: {1}]", paddlePosition);
 	}
 }
