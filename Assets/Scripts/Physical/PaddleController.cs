@@ -20,4 +20,8 @@ public class PaddleController : PhysicalObjectController
 
 	protected float speed = Global.BASE_PADDLE_SPEED;
 
+	public override string ToString ()
+	{
+		return string.Format("[PaddleController: {1}]", paddlePosition);
+	}
 }

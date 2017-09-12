@@ -8,26 +8,46 @@ using UnityEngine;
 public class PlayerPaddleController : PaddleController
 {
 	Vector3 fingerOffset;
+	bool wasDraggedInFrame = true;
 
 	void FixedUpdate()
 	{
 		#if UNITY_STANDALONE || UNITY_EDITOR || UNITY_WEBGL
-		UpdateVelocity();
+			updateVelocity();
+		#elif UNITY_IOS || UNITY_ANDROID
+			toggleKinematicOnDrag();
 		#endif
 	}
-
-	void UpdateVelocity()
+		
+	void updateVelocity()
 	{
-		rigibody.velocity = 
-			new Vector2(0, 
-				Input.GetAxis(
-					PlayerUtil.IDToString(paddlePosition)) * speed);
+		float speed = Input.GetAxis(PlayerUtil.IDToString(paddlePosition)) * this.speed;
+		rigibody.velocity = new Vector2(NONE_VALUE, speed);
+		if(mouseIsDown)
+		{
+			if(rigibody.isKinematic)
+			{
+				setKinematic(false);	
+			}
+		}
+		else
+		{
+			setKinematic(speed == NONE_VALUE);
+		}
+	}
+
+	void toggleKinematicOnDrag()
+	{
+		setKinematic(!wasDraggedInFrame);
+		wasDraggedInFrame = false;
 	}
 
 	#if UNITY_STANDALONE || UNITY_EDITOR || UNITY_WEBGL
 
-	void OnMouseDown()
+	protected override void OnMouseDown()
 	{
+		base.OnMouseDown();
+		setKinematic(false);
 		SetOffset(DragUtil.GetMousePosition());
 	}
 
@@ -36,6 +56,16 @@ public class PlayerPaddleController : PaddleController
 		DragPaddle(DragUtil.GetMousePosition());
 	}
 
+	protected override void OnMouseUp()
+	{
+		base.OnMouseUp();
+		setKinematic(true);
+		if(rigibody.isKinematic)
+		{
+			rigibody.velocity = Vector2.zero;
+		}
+	}
+		
 	#endif
 
 	public void SetOffset(Vector3 inputPosition)
@@ -47,5 +77,11 @@ public class PlayerPaddleController : PaddleController
 	{
 		Vector3 newDragPosition = inputPosition - fingerOffset;
 		transform.position = new Vector3(transform.position.x, newDragPosition.y, transform.position.z);
+		wasDraggedInFrame = true;
+	}
+
+	void setKinematic(bool enabled)
+	{
+		rigibody.isKinematic = enabled;
 	}
 }

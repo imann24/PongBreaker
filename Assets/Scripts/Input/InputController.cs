@@ -2,8 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class InputController : MonoBehaviour {
-
+public class InputController : MonoBehaviourExtended 
+{
 	Dictionary<int, PlayerPaddleController> DraggingPaddles =
 		new Dictionary<int, PlayerPaddleController>();
 
