@@ -22,6 +22,6 @@ public class PaddleController : PhysicalObjectController
 
 	public override string ToString ()
 	{
-		return string.Format("[PaddleController: {1}]", paddlePosition);
+		return string.Format("[PaddleController: {0}]", paddlePosition);
 	}
 }

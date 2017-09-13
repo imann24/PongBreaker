@@ -7,15 +7,34 @@ using UnityEngine;
 
 public class PlayerPaddleController : PaddleController
 {
+	public int TouchCount 
+	{
+		get;
+		private set;
+	}
+
+	public bool IsKinematic
+	{
+		get
+		{
+			return rigibody.isKinematic;
+		}
+	}
+
+	public Vector2 Velocity
+	{
+		get
+		{
+			return rigibody.velocity;
+		}
+	}
+		
 	Vector3 fingerOffset;
-	bool wasDraggedInFrame = true;
 
 	void FixedUpdate()
 	{
 		#if UNITY_STANDALONE || UNITY_EDITOR || UNITY_WEBGL
 			updateVelocity();
-		#elif UNITY_IOS || UNITY_ANDROID
-			toggleKinematicOnDrag();
 		#endif
 	}
 		
@@ -27,7 +46,7 @@ public class PlayerPaddleController : PaddleController
 		{
 			if(rigibody.isKinematic)
 			{
-				setKinematic(false);	
+				setKinematic(false);
 			}
 		}
 		else
@@ -35,20 +54,13 @@ public class PlayerPaddleController : PaddleController
 			setKinematic(speed == NONE_VALUE);
 		}
 	}
-
-	void toggleKinematicOnDrag()
-	{
-		setKinematic(!wasDraggedInFrame);
-		wasDraggedInFrame = false;
-	}
-
+		
 	#if UNITY_STANDALONE || UNITY_EDITOR || UNITY_WEBGL
 
 	protected override void OnMouseDown()
 	{
 		base.OnMouseDown();
-		setKinematic(false);
-		SetOffset(DragUtil.GetMousePosition());
+		StartDrag(DragUtil.GetMousePosition());
 	}
 
 	void OnMouseDrag()
@@ -59,16 +71,29 @@ public class PlayerPaddleController : PaddleController
 	protected override void OnMouseUp()
 	{
 		base.OnMouseUp();
-		setKinematic(true);
 		if(rigibody.isKinematic)
 		{
 			rigibody.velocity = Vector2.zero;
 		}
+		EndDrag();
 	}
 		
 	#endif
 
-	public void SetOffset(Vector3 inputPosition)
+	public void StartDrag(Vector3 inputPosition)
+	{
+		setOffset(inputPosition);
+		TouchCount++;
+		setKinematic(false);
+	}
+
+	public void EndDrag()
+	{
+		TouchCount--;
+		setKinematic(true);
+	}
+
+	void setOffset(Vector3 inputPosition)
 	{
 		fingerOffset = inputPosition - transform.position;
 	}
@@ -77,11 +102,25 @@ public class PlayerPaddleController : PaddleController
 	{
 		Vector3 newDragPosition = inputPosition - fingerOffset;
 		transform.position = new Vector3(transform.position.x, newDragPosition.y, transform.position.z);
-		wasDraggedInFrame = true;
 	}
 
 	void setKinematic(bool enabled)
 	{
 		rigibody.isKinematic = enabled;
+		if(rigibody.isKinematic)
+		{
+			zeroOutVelocity();
+		}
+	}
+
+	protected override void OnCollisionEnter2D(Collision2D collision)
+	{
+		base.OnCollisionEnter2D(collision);
+		zeroOutVelocity();
+	}
+
+	void zeroOutVelocity()
+	{
+		rigibody.velocity = Vector2.zero;
 	}
 }
