@@ -60,4 +60,9 @@ public abstract class MonoBehaviourExtended : MonoBehaviour
 	{
 		mouseIsDown = false;
 	}
+
+	protected virtual void OnCollisionEnter2D(Collision2D collision)
+	{
+
+	}
 }

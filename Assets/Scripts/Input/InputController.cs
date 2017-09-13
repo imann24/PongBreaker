@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 
 public class InputController : MonoBehaviourExtended 
@@ -10,26 +10,13 @@ public class InputController : MonoBehaviourExtended
 	// Update is called once per frame
 	void FixedUpdate()
 	{
-		foreach(Touch touch in Input.touches) 
+		if(Input.touches.Length == NONE_VALUE)
 		{
-			if(touch.phase == TouchPhase.Ended) 
-			{
-				DraggingPaddles.Remove(touch.fingerId);
-				continue;
-			}
-			Vector3 touchPosition;
-			GameObject paddle = DragUtil.GetTouchTarget(touch, out touchPosition);
-			PlayerPaddleController controller;
-			if(IsPaddle(paddle, out controller) && touch.phase == TouchPhase.Began) 
-			{
-				controller.SetOffset(touchPosition);
-				DraggingPaddles.Add(touch.fingerId, controller);
-			}
-			else if(DraggingPaddles.TryGetValue(touch.fingerId, out controller) 
-				&& touch.phase == TouchPhase.Moved)
-			{
-				controller.DragPaddle(DragUtil.GetTouchPosition(touch));
-			}
+			zeroOutTouches();
+		}
+		else
+		{
+			updateAllTouches();
 		}
 	}
 
@@ -44,6 +31,52 @@ public class InputController : MonoBehaviourExtended
 		{
 			controller = null;
 			return false;
+		}
+	}
+
+	void zeroOutTouches()
+	{
+		foreach(int touchId in DraggingPaddles.Keys)
+		{
+			PlayerPaddleController controller = DraggingPaddles[touchId];
+			controller.EndDrag();
+		}
+		DraggingPaddles.Clear();
+	}
+
+	void updateAllTouches()
+	{
+		foreach(Touch touch in Input.touches) 
+		{
+			updateTouch(touch);
+		}
+	}
+
+	void updateTouch(Touch touch)
+	{
+		PlayerPaddleController controller;
+		Vector3 touchPosition;
+		GameObject paddle = DragUtil.GetTouchTarget(touch, out touchPosition);
+		if(touch.phase == TouchPhase.Ended)
+		{
+			if(DraggingPaddles.TryGetValue(touch.fingerId, out controller))	
+			{
+				controller.EndDrag();
+				DraggingPaddles.Remove(touch.fingerId);
+			}
+		}
+		else if(IsPaddle(paddle, out controller) && touch.phase == TouchPhase.Began) 
+		{
+			if(!DraggingPaddles.ContainsKey(touch.fingerId))
+			{
+				DraggingPaddles.Add(touch.fingerId, controller);
+				controller.StartDrag(touchPosition);
+			}
+		}
+		else if(DraggingPaddles.TryGetValue(touch.fingerId, out controller) 
+			&& touch.phase == TouchPhase.Moved)
+		{
+			controller.DragPaddle(DragUtil.GetTouchPosition(touch));
 		}
 	}
 }
