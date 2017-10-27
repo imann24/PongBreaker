@@ -51,7 +51,6 @@ public class CountDownController : SingletonBehaviour<CountDownController> {
 	{
 		if(eventName == EventList.GOAL) 
 		{
-			Debug.Log("COUNTING DOWN");
 			CountDownFrom();
 		}
 	}
