@@ -45,10 +45,10 @@ public class GameplayController : SingletonBehaviour<GameplayController>
 	{
 		switch(game.Type)
 		{
-			case GameType.PlayerVsAI:
+			case GameType.HumanVsAI:
 				initializePlayerVsAIGame();
 				break;
-			case GameType.PlayerVsPlayer:
+			case GameType.HumanVsHuman:
 				initializePlayerVsPlayerGame();
 				break;
 		}

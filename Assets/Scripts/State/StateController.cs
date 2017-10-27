@@ -17,11 +17,13 @@ public class StateController : SingletonBehaviour<StateController>
 		}
 	}
 
+	Tuning tuning;
+
 	Game _currentGame;
 		
 	Game getDefaultGame()
 	{
-		return new Game(default(GameType));
+		return new Game(default(GameType), tuning);
 	}
 		
 	SceneController scene;
@@ -47,6 +49,12 @@ public class StateController : SingletonBehaviour<StateController>
 	public void ResumeGame(Game game)
 	{
 		game.Resume();
+	}
+
+	protected override void Awake()
+	{
+		base.Awake();
+		tuning = Tuning.Get;
 	}
 
 	protected override void Start()

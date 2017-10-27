@@ -40,13 +40,35 @@ public class Game
 		private set;
 	}
 
-	public GameType Type
+	public Player LeftPlayer
 	{
 		get;
 		private set;
 	}
 
-	public int ScoreToWin
+	public Player RightPlayer
+	{
+		get;
+		private set;
+	}
+
+	public Player this[PaddlePosition paddle]
+	{
+		get
+		{
+			switch(paddle)
+			{
+				case PaddlePosition.Left:
+					return LeftPlayer;
+				case PaddlePosition.Right:
+					return RightPlayer;
+				default:
+					return null;
+			}
+		}
+	}
+
+	public GameType Type
 	{
 		get;
 		private set;
@@ -58,15 +80,16 @@ public class Game
 		private set;
 	}
 
-	public Game(GameType type, int scoreToWin)
+	public Game(GameType type, Tuning tuning)
 	{
 		this.Type = type;
-		this.ScoreToWin = scoreToWin;
 		this.State = GameState.Inactive;
 		OnStart = new DelegateAction(this);
 		OnResume = new DelegateAction(this);
 		OnPause = new DelegateAction(this);
 		OnEnd = new DelegateAction(this);
+		LeftPlayer = new Player(PlayerType.Human, tuning);
+		RightPlayer = new Player(type == GameType.HumanVsHuman ? PlayerType.Human : PlayerType.AI, tuning);
 	}
 
 	public void Play()
@@ -91,5 +114,18 @@ public class Game
 	{
 		this.State = GameState.Paused;
 		OnEnd.Call(this);
+	}
+
+	public int ScoreGoal(PaddlePosition paddle)
+	{
+		Player player = this[paddle];
+		if(player == null)
+		{
+			return default(int);
+		}
+		else
+		{
+			return player.ScoreGoal();
+		}
 	}
 }

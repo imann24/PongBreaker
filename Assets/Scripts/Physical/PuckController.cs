@@ -102,11 +102,14 @@ public class PuckController : PhysicalObjectController
 		);
 	}
 
-	void OnCollisionEnter2D (Collision2D collision) {
+	protected override void OnCollisionEnter2D (Collision2D collision) 
+	{
+		base.OnCollisionEnter2D(collision);
 		EventControler.Event(collision.gameObject.tag);
 	}
 
-	void OnCollisionExit2D (Collision2D collision) {
+	void OnCollisionExit2D (Collision2D collision) 
+	{
 		PreventPerpendicularPaths();
 		MaintainMomentum();
 	}

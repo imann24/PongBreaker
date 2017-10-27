@@ -1,27 +1,32 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿/**
+ * Author: Isaiah Mann
+ * Description: Handles score logic
+ */
 
-public class ScoreController : MonoBehaviour {
+using UnityEngine;
 
-	Dictionary <PaddlePosition, int> scores = new Dictionary<PaddlePosition, int>();
+public class ScoreController : MonoBehaviourExtended 
+{
+	Game game;
 
-	void Awake () {
+	protected override void Awake()
+	{
+		base.Awake();
 		Init();
 	}
 		
+	protected override void Start()
+	{
+		base.Start();
+		game = StateController.Instance.CurrentGame;
+	}
+
 	void OnDestroy () {
 		Unsubscribe();
 	}
 
 	void Init () {
 		Subscribe();
-		InitScores();
-	}
-
-	void InitScores () {
-		scores.Add(PaddlePosition.Left, 0);
-		scores.Add(PaddlePosition.Right, 0);
 	}
 
 	void Subscribe () {
@@ -36,20 +41,14 @@ public class ScoreController : MonoBehaviour {
 		PaddlePosition scoringPlayer = PlayerUtil.GetOpponent(PlayerUtil.GetPlayerFromGoalTag(eventName));
 
 		if (scoringPlayer != PaddlePosition.None) {
-			int score = Score(scoringPlayer);
-			scores[scoringPlayer] += score;
+			if(game == null)
+			{
+				Debug.LogErrorFormat("Game is null for {0} instance", GetType());
+				return;
+			}
+			int score = game.ScoreGoal(scoringPlayer);
 			ScoreDisplayer.ModifyScore(scoringPlayer, score);
 			EventControler.Event(EventList.GOAL);
 		}
 	}
-
-	int Score (PaddlePosition scoringPlayer) {
-		return GetMultiplier(scoringPlayer) * Global.BASE_GOAL_SCORE;
-	}
-
-	// TODO: Add more
-	int GetMultiplier (PaddlePosition scoringPlayer) {
-		return 1;
-	}
-
 }
