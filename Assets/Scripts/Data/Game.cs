@@ -40,7 +40,13 @@ public class Game
 		private set;
 	}
 
-	public GameType Type 
+	public GameType Type
+	{
+		get;
+		private set;
+	}
+
+	public int ScoreToWin
 	{
 		get;
 		private set;
@@ -52,9 +58,10 @@ public class Game
 		private set;
 	}
 
-	public Game(GameType type)
+	public Game(GameType type, int scoreToWin)
 	{
 		this.Type = type;
+		this.ScoreToWin = scoreToWin;
 		this.State = GameState.Inactive;
 		OnStart = new DelegateAction(this);
 		OnResume = new DelegateAction(this);
