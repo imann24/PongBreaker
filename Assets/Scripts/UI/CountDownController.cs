@@ -4,8 +4,10 @@ using System.Collections;
 
 [RequireComponent(typeof(Text))]
 public class CountDownController : SingletonBehaviour<CountDownController> {
-	public int MaxTextSize = 200;
-	public int MinTextSize = 75;
+	[SerializeField]
+	int MaxTextSize = 200;
+	[SerializeField]
+	int MinTextSize = 75;
 
 	Text countText;
 
@@ -35,29 +37,36 @@ public class CountDownController : SingletonBehaviour<CountDownController> {
 		base.OnDestroy();
 	}
 
-	void Subscribe () {
+	void Subscribe()
+	{
 		EventControler.OnNamedEvent += HandleNamedEvent;	
 	}
 
-	void Unsubscribe () {
+	void Unsubscribe() 
+	{
 		EventControler.OnNamedEvent -= HandleNamedEvent;
 	}
 
-	void HandleNamedEvent (string eventName) {
-		if (eventName == EventList.GOAL) {
+	void HandleNamedEvent(string eventName) 
+	{
+		if(eventName == EventList.GOAL) 
+		{
 			CountDownFrom();
 		}
 	}
 
-	public void CountDownFrom (int startingNumber = (int) Global.PUCK_RESPAWN_TIME) {
+	public void CountDownFrom(int startingNumber = (int) Global.PUCK_RESPAWN_TIME)
+	{
 		StartCoroutine(CountDown(startingNumber));
 	}
 
-	IEnumerator CountDown (int startingNumber) {
+	IEnumerator CountDown(int startingNumber) 
+	{
 		int number = startingNumber;
 		float shrinkTime = 1.0f;
 		countText.enabled = true;
-		while (number > 0) {
+		while(number > 0) 
+		{
 			countText.text = number.ToString();
 			StartCoroutine(Shrink(shrinkTime));
 			yield return new WaitForSeconds(shrinkTime);
@@ -66,9 +75,11 @@ public class CountDownController : SingletonBehaviour<CountDownController> {
 		countText.enabled = false;
 	}
 
-	IEnumerator Shrink (float time = 1.0f) {
+	IEnumerator Shrink(float time = 1.0f) 
+	{
 		float timer = 0;
-		while (timer <= time) {
+		while(timer <= time)
+		{
 			timer += Time.deltaTime;
 			countText.fontSize = (int) Mathf.Lerp(MaxTextSize, MinTextSize, timer/time);
 			yield return new WaitForEndOfFrame();
