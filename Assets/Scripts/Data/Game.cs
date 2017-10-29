@@ -40,6 +40,12 @@ public class Game
 		private set;
 	}
 
+	public DelegateAction OnRestart
+	{
+		get;
+		private set;
+	}
+
 	public Player LeftPlayer
 	{
 		get;
@@ -50,6 +56,14 @@ public class Game
 	{
 		get;
 		private set;
+	}
+
+	public Player[] Players
+	{
+		get
+		{
+			return new Player[]{LeftPlayer, RightPlayer};
+		}
 	}
 
 	public Player this[PaddlePosition paddle]
@@ -88,8 +102,18 @@ public class Game
 		OnResume = new DelegateAction(this);
 		OnPause = new DelegateAction(this);
 		OnEnd = new DelegateAction(this);
-		LeftPlayer = new Player(PlayerType.Human, tuning);
-		RightPlayer = new Player(type == GameType.HumanVsHuman ? PlayerType.Human : PlayerType.AI, tuning);
+		OnRestart = new DelegateAction(this);
+		LeftPlayer = new Player(PlayerType.Human, tuning, 1);
+		RightPlayer = new Player(type == GameType.HumanVsHuman ? PlayerType.Human : PlayerType.AI, tuning, 2);
+		subscribeToPlayerWinEvents(Players);
+	}
+
+	void subscribeToPlayerWinEvents(Player[] players)
+	{
+		foreach(Player player in players)
+		{
+			player.OnPlayerWin.Subscribe(End);
+		}
 	}
 
 	public void Play()
@@ -114,6 +138,16 @@ public class Game
 	{
 		this.State = GameState.Paused;
 		OnEnd.Call(this);
+	}
+
+	public void Restart()
+	{
+		foreach(Player player in Players)
+		{
+			player.ResetScore();
+		}
+		OnRestart.Call(this);
+		Play();
 	}
 
 	public int ScoreGoal(PaddlePosition paddle)

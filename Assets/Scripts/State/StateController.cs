@@ -51,6 +51,11 @@ public class StateController : SingletonBehaviour<StateController>
 		game.Resume();
 	}
 
+	public void RestartGame(Game game)
+	{
+		game.Restart();
+	}
+
 	protected override void Awake()
 	{
 		base.Awake();

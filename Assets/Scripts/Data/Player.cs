@@ -23,14 +23,21 @@ public class Player
 		private set;
 	}
 
+	public int Index
+	{
+		get;
+		private set;
+	}
+
 	Tuning tuning;
 
-	public Player(PlayerType type, Tuning tuning)
+	public Player(PlayerType type, Tuning tuning, int index)
 	{
 		this.OnPlayerWin = new DelegateAction(this);
 		this.Score = 0;
 		Type = type;
 		this.tuning = tuning;
+		this.Index = index;
 	}
 
 	public int ScoreGoal()
@@ -41,5 +48,10 @@ public class Player
 			OnPlayerWin.Call(this);
 		}
 		return Score;
+	}
+
+	public void ResetScore()
+	{
+		Score = 0;
 	}
 }
