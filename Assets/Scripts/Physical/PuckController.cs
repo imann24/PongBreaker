@@ -3,6 +3,9 @@ using System.Collections;
 
 public class PuckController : PhysicalObjectController 
 {
+    [SerializeField]
+    float perpendicularTolerance = 0.01f;
+
 	public bool IsAlive
 	{
 		get;
@@ -87,9 +90,23 @@ public class PuckController : PhysicalObjectController
 		rigibody.velocity = Vector2Util.Clamp(rigibody.velocity, Global.MAX_PUCK_SPEED, -Global.MAX_PUCK_SPEED);
 	}
 
-	void PreventPerpendicularPaths () {
-		rigibody.velocity = Vector2Util.MakeDiagonal(rigibody.velocity);
-	}
+    void PreventPerpendicularPaths()
+    {
+        if (isOnPerpendicularPath())
+        {
+            rigibody.velocity = Vector2Util.MakeDiagonal(rigibody.velocity);
+        }
+    }
+
+    bool isOnPerpendicularPath()
+    {
+        return withinPerpendicularTolerance(rigibody.velocity.x) || withinPerpendicularTolerance(rigibody.velocity.y);
+    }
+
+    bool withinPerpendicularTolerance(float value)
+    {
+        return Mathf.Abs(value) < perpendicularTolerance;
+    }
 
 	void MaintainMomentum () {
 		rigibody.velocity = Vector2Util.SpeedBoost(rigibody.velocity);
