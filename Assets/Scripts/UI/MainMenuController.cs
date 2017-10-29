@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class MainMenuController : MonoBehaviourExtended
 {
+	Tuning tuning;
+
 	[SerializeField]
 	UIButton playGameVsAIButton, playGameVsPlayerButton;
 
@@ -15,6 +17,7 @@ public class MainMenuController : MonoBehaviourExtended
 	protected override void Awake()
 	{
 		base.Awake();
+		tuning = Tuning.Get;
 	}
 
 	protected override void Start()
@@ -27,11 +30,11 @@ public class MainMenuController : MonoBehaviourExtended
 
 	void launchVsAIGame()
 	{
-		state.LaunchGame(new Game(GameType.PlayerVsAI));	
+		state.LaunchGame(new Game(GameType.HumanVsAI, tuning));	
 	}
 
 	void launchVsPlayerGame()
 	{
-		state.LaunchGame(new Game(GameType.PlayerVsPlayer));
+		state.LaunchGame(new Game(GameType.HumanVsHuman, tuning));
 	}
 }

@@ -21,6 +21,20 @@ public class CountDownController : SingletonBehaviour<CountDownController> {
 		}
 	}
 
+	protected override void Start()
+	{
+		base.Start();
+		Game game = StateController.Instance.CurrentGame;
+		game.OnStart.Subscribe(
+			delegate
+			{
+				gameObject.SetActive(true);
+				CountDownFrom();
+			}
+		);
+		game.OnEnd.Subscribe(delegate{gameObject.SetActive(false);});
+	}
+
 	void Init()
 	{
 		countText = GetComponent<Text>();
@@ -49,7 +63,7 @@ public class CountDownController : SingletonBehaviour<CountDownController> {
 
 	void HandleNamedEvent(string eventName) 
 	{
-		if(eventName == EventList.GOAL) 
+		if(eventName == EventList.GOAL && gameObject.activeInHierarchy) 
 		{
 			CountDownFrom();
 		}

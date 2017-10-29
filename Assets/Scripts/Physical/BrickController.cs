@@ -33,8 +33,9 @@ public class BrickController : PhysicalObjectController
 		sRenderer = GetComponent<SpriteRenderer>();
 	}
 
-	void OnCollisionEnter2D(Collision2D collision) 
+	protected override void OnCollisionEnter2D(Collision2D collision) 
 	{
+		base.OnCollisionEnter2D(collision);
 		if(collision.gameObject.tag == Global.PUCK) 
 		{
 			Break();

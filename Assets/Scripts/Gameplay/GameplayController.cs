@@ -31,6 +31,7 @@ public class GameplayController : SingletonBehaviour<GameplayController>
 		{
 			unsubscribeEvents(game);
 		}
+		resumeTime();
 	}
 
 	void initialize(Game game)
@@ -45,10 +46,10 @@ public class GameplayController : SingletonBehaviour<GameplayController>
 	{
 		switch(game.Type)
 		{
-			case GameType.PlayerVsAI:
+			case GameType.HumanVsAI:
 				initializePlayerVsAIGame();
 				break;
-			case GameType.PlayerVsPlayer:
+			case GameType.HumanVsHuman:
 				initializePlayerVsPlayerGame();
 				break;
 		}
@@ -56,6 +57,7 @@ public class GameplayController : SingletonBehaviour<GameplayController>
 
 	void subscribeEvents(Game game)
 	{
+		game.OnStart.Subscribe(resume);
 		game.OnPause.Subscribe(pause);
 		game.OnResume.Subscribe(resume);
 		game.OnEnd.Subscribe(endGame);
@@ -63,6 +65,7 @@ public class GameplayController : SingletonBehaviour<GameplayController>
 
 	void unsubscribeEvents(Game game)
 	{
+		game.OnStart.Unsubscribe(resume);
 		game.OnPause.Unsubscribe(pause);
 		game.OnResume.Unsubscribe(resume);
 		game.OnEnd.Unsubscribe(endGame);
@@ -80,9 +83,9 @@ public class GameplayController : SingletonBehaviour<GameplayController>
 
 	void endGame()
 	{
-		resumeTime();
+		pauseTime();
 	}
-
+		
 	void initializePlayerVsAIGame()
 	{
 		initializePlayerPaddle(leftPaddle, PaddlePosition.Left);

@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class PuckController : PhysicalObjectController 
 {
     [SerializeField]
     float perpendicularTolerance = 0.01f;
+	TrailRenderer trail;
 
 	public bool IsAlive
 	{
@@ -16,7 +17,23 @@ public class PuckController : PhysicalObjectController
 	protected override void Start() 
 	{
 		base.Start();
+		trail = GetComponent<TrailRenderer>();
 		Init();
+		Game game = StateController.Instance.CurrentGame;
+		game.OnStart.Subscribe(
+			delegate
+			{
+				gameObject.SetActive(true);
+				SpawnPuck();
+			}
+		);
+		game.OnEnd.Subscribe(
+			delegate
+			{
+				TogglePuck(false);
+				gameObject.SetActive(false);
+			}
+		);
 	}
 
 	void Init() 
@@ -43,7 +60,7 @@ public class PuckController : PhysicalObjectController
 
 	void HandleNamedEvent(string eventName) 
 	{
-		if(eventName == EventList.GOAL) 
+		if(eventName == EventList.GOAL && gameObject.activeInHierarchy)
 		{
 			SpawnPuck(Global.PUCK_RESPAWN_TIME);
 		}
@@ -65,9 +82,13 @@ public class PuckController : PhysicalObjectController
 
 	public void TogglePuck (bool active) {
 		sprite.enabled = active;
-		if (active) {
+		trail.enabled = active;
+		if(active) 
+		{
 			rigibody.WakeUp();
-		} else {
+		} 
+		else 
+		{
 			rigibody.Sleep();
 		}
 		IsAlive = active;
@@ -119,11 +140,14 @@ public class PuckController : PhysicalObjectController
 		);
 	}
 
-	void OnCollisionEnter2D (Collision2D collision) {
+	protected override void OnCollisionEnter2D (Collision2D collision) 
+	{
+		base.OnCollisionEnter2D(collision);
 		EventControler.Event(collision.gameObject.tag);
 	}
 
-	void OnCollisionExit2D (Collision2D collision) {
+	void OnCollisionExit2D (Collision2D collision) 
+	{
 		PreventPerpendicularPaths();
 		MaintainMomentum();
 	}

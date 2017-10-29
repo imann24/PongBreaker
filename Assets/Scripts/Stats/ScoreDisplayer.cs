@@ -36,14 +36,32 @@ public class ScoreDisplayer : MonoBehaviour {
 	}
 
 	void UpdateScore (int delta) {
-		score += delta;
-		scoreText.text = score.ToString();
+		setScore(score + delta);
 	}
 
+	void setScore(int newValue)
+	{
+		score = newValue;
+		scoreText.text = score.ToString();
+	}
+		
 	public static void ModifyScore (PaddlePosition player, int delta) {
 		ScoreDisplayer score;
 		if (InstancesByPlayer.TryGetValue(player, out score)) {
 			score.UpdateScore(delta);
+		}
+	}
+
+	public void ResetScore()
+	{
+		setScore(0);
+	}
+
+	public static void ResetScores()
+	{
+		foreach(ScoreDisplayer score in InstancesByPlayer.Values)
+		{
+			score.ResetScore();
 		}
 	}
 }
