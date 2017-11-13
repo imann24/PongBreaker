@@ -80,34 +80,30 @@ public class PuckController : PhysicalObjectController
 		return transform.localPosition.x;
 	}
 
-	public void TogglePuck (bool active) {
+	public void TogglePuck(bool active) 
+	{
 		sprite.enabled = active;
 		trail.enabled = active;
-		if(active) 
-		{
-			rigibody.WakeUp();
-		} 
-		else 
-		{
-			rigibody.Sleep();
-		}
+		rigibody.isKinematic = !active;
 		IsAlive = active;
 	}
 
-	IEnumerator TimedSpawnPuck (float waitTime = 0) {
+	IEnumerator TimedSpawnPuck(float waitTime = 0) 
+	{
 		TogglePuck(false);
 		yield return new WaitForSeconds(waitTime);
-		TogglePuck(true);
-
 		transform.position = Vector2Util.Origin;
+		TogglePuck(true);
 		RandomStartingVelocity();
 	}
 
-	void FixedUpdate () {
+	void FixedUpdate() 
+	{
 		CapSpeed();
 	}
 
-	void CapSpeed () {
+	void CapSpeed()
+	{
 		rigibody.velocity = Vector2Util.Clamp(rigibody.velocity, Global.MAX_PUCK_SPEED, -Global.MAX_PUCK_SPEED);
 	}
 
