@@ -33,19 +33,22 @@ public class ScoreController : MonoBehaviourExtended
 		Unsubscribe();
 	}
 
-	void Init () {
+	void Init()
+	{
 		Subscribe();
 	}
 
-	void Subscribe () {
+	void Subscribe()
+	{
 		EventControler.OnNamedEvent += HandleNamedEvent;
 	}
 
-	void Unsubscribe () {
+	void Unsubscribe() 
+	{
 		EventControler.OnNamedEvent -= HandleNamedEvent;
 	}
 
-	void HandleNamedEvent (string eventName)
+	void HandleNamedEvent(string eventName)
 	{
 		PaddlePosition scoringPlayer = PlayerUtil.GetOpponent(PlayerUtil.GetPlayerFromGoalTag(eventName));
 		if(scoringPlayer != PaddlePosition.None) 
