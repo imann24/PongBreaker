@@ -3,15 +3,18 @@ using System.Collections;
 
 public class PuckController : PhysicalObjectController 
 {
-    [SerializeField]
-    float perpendicularTolerance = 0.01f;
-	TrailRenderer trail;
-
 	public bool IsAlive
 	{
 		get;
 		private set;
 	}
+
+    [SerializeField]
+    float perpendicularTolerance = 0.01f;
+	
+	TrailRenderer trail;
+
+	bool hasScored = false;
 
 	// Use this for initialization
 	protected override void Start() 
@@ -95,6 +98,7 @@ public class PuckController : PhysicalObjectController
 		transform.position = Vector2Util.Origin;
 		TogglePuck(true);
 		RandomStartingVelocity();
+		hasScored = false;
 	}
 
 	void FixedUpdate() 
@@ -125,11 +129,13 @@ public class PuckController : PhysicalObjectController
         return Mathf.Abs(value) < perpendicularTolerance;
     }
 
-	void MaintainMomentum () {
+	void MaintainMomentum() 
+	{
 		rigibody.velocity = Vector2Util.SpeedBoost(rigibody.velocity);
 	}
 
-	void RandomStartingVelocity () {
+	void RandomStartingVelocity() 
+	{
 		rigibody.velocity = new Vector2 (
 			Random.Range (-Global.MAX_PUCK_STARTING_SPEED, Global.MAX_PUCK_STARTING_SPEED),
 			Random.Range (-Global.MAX_PUCK_STARTING_SPEED, Global.MAX_PUCK_STARTING_SPEED)
@@ -139,21 +145,24 @@ public class PuckController : PhysicalObjectController
 	protected override void OnCollisionEnter2D (Collision2D collision) 
 	{
 		base.OnCollisionEnter2D(collision);
-		EventControler.Event(collision.gameObject.tag);
+		string collisionTag = collision.gameObject.tag;
+		if(PlayerUtil.IsGoalTag(collisionTag))
+		{
+			if(!hasScored)
+			{
+				EventControler.Event(collisionTag);
+				hasScored = true;
+			}
+		}
+		else
+		{
+			EventControler.Event(collisionTag);
+		}
 	}
 
 	void OnCollisionExit2D (Collision2D collision) 
 	{
 		PreventPerpendicularPaths();
 		MaintainMomentum();
-	}
-
-	// TODO: Add a more elegant scoring system
-	int ScoreGoal (PaddlePosition scoringPlayer) {
-		return CalculateMultipliers(scoringPlayer) * Global.BASE_GOAL_SCORE;
-	}
-
-	int CalculateMultipliers (PaddlePosition scoringPlayer) {
-		return 1;
 	}
 }

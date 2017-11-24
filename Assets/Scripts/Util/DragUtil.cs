@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public static class DragUtil {
 	public static Vector3 GetMousePosition () {
@@ -11,14 +10,17 @@ public static class DragUtil {
 		return Camera.main.ScreenToWorldPoint(touch.position);
 	}
 
-	public static GameObject GetTouchTarget (Touch touch, out Vector3 touchPosition) {
+	public static GameObject GetTouchTarget(Touch touch, out Vector3 touchPosition) 
+	{
 		touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
 		RaycastHit2D hit = Physics2D.Raycast (touchPosition, Vector2.zero);
 
-		if (hit.collider != null) {
-			Debug.Log(hit.collider.gameObject);
+		if(hit.collider != null) 
+		{
 			return hit.collider.gameObject;
-		} else {
+		}
+		else 
+		{
 			return null;
 		}
 	}
