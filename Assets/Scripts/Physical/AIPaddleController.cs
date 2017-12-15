@@ -1,6 +1,6 @@
 ﻿/*
  * Author: Isaiah Mann
- * Description:
+ * Description: AI behaviour of paddle
  */
 
 using System.Collections.Generic;
@@ -52,11 +52,16 @@ public class AIPaddleController : PaddleController
 		if(puck && puck.IsAlive)
 		{
 			float puckXPosition = puck.GetXPosition();
-			return inRange >= Mathf.Abs(puckXPosition - transform.position.x);
+			return inRange >= Mathf.Abs(puckXPosition - transform.position.x) && !isPuckInGoal(puck);
 		}
 		else
 		{
 			return false;
 		}
+	}
+
+	bool isPuckInGoal(PuckController puck) {
+		return Mathf.Abs(puck.GetXPosition() - myGoal.transform.position.x) > 
+			Mathf.Abs(transform.position.x - myGoal.transform.position.x);
 	}
 }

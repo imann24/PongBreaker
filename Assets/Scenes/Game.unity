@@ -1361,6 +1361,10 @@ Prefab:
       propertyPath: m_Name
       value: Brick (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 127238, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
   m_IsPrefabParent: 0
@@ -1525,6 +1529,10 @@ Prefab:
       propertyPath: m_Name
       value: Brick (25)
       objectReference: {fileID: 0}
+    - target: {fileID: 127238, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
   m_IsPrefabParent: 0
@@ -1618,6 +1626,16 @@ Prefab:
       propertyPath: puck
       value: 
       objectReference: {fileID: 1749708402}
+    - target: {fileID: 114808962928167916, guid: 9ad45d71215814b2c81c83fdffcc2206,
+        type: 2}
+      propertyPath: leftGoal
+      value: 
+      objectReference: {fileID: 1941445670}
+    - target: {fileID: 114808962928167916, guid: 9ad45d71215814b2c81c83fdffcc2206,
+        type: 2}
+      propertyPath: rightGoal
+      value: 
+      objectReference: {fileID: 1718586008}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9ad45d71215814b2c81c83fdffcc2206, type: 2}
   m_IsPrefabParent: 0
@@ -1827,6 +1845,10 @@ Prefab:
     - target: {fileID: 127238, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
       propertyPath: m_Name
       value: Brick (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 127238, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
@@ -2400,6 +2422,10 @@ Prefab:
       propertyPath: m_Name
       value: Brick (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 127238, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
   m_IsPrefabParent: 0
@@ -2865,6 +2891,10 @@ Prefab:
       propertyPath: m_Name
       value: Brick (23)
       objectReference: {fileID: 0}
+    - target: {fileID: 127238, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
   m_IsPrefabParent: 0
@@ -3103,6 +3133,10 @@ Prefab:
       propertyPath: m_Name
       value: Brick (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 127238, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
   m_IsPrefabParent: 0
@@ -3184,6 +3218,10 @@ Prefab:
     - target: {fileID: 127238, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
       propertyPath: m_Name
       value: Brick (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 127238, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
@@ -3340,6 +3378,10 @@ Prefab:
     - target: {fileID: 127238, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
       propertyPath: m_Name
       value: Brick (18)
+      objectReference: {fileID: 0}
+    - target: {fileID: 127238, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
@@ -3645,6 +3687,10 @@ Prefab:
       propertyPath: m_Mass
       value: 0.25
       objectReference: {fileID: 0}
+    - target: {fileID: 11482724, guid: 83a877b6b1ad244fa95457d946862c20, type: 2}
+      propertyPath: yForceScaler
+      value: -100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 83a877b6b1ad244fa95457d946862c20, type: 2}
   m_IsPrefabParent: 0
@@ -3700,6 +3746,10 @@ Prefab:
     - target: {fileID: 127238, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
       propertyPath: m_Name
       value: Brick (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 127238, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
@@ -4028,6 +4078,10 @@ Prefab:
       propertyPath: m_Name
       value: Brick (20)
       objectReference: {fileID: 0}
+    - target: {fileID: 127238, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f7a73515e62ee4cc69353ec633cea0e1, type: 2}
   m_IsPrefabParent: 0
@@ -4237,6 +4291,11 @@ Prefab:
         type: 2}
       propertyPath: m_Pivot.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 223154693583848606, guid: 69b588e6c29e44e17b3185e42fdb0344,
+        type: 2}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 69b588e6c29e44e17b3185e42fdb0344, type: 2}

@@ -12,6 +12,10 @@ public class GameplayController : SingletonBehaviour<GameplayController>
 	[SerializeField]
 	GameObject rightPaddle;
 	[SerializeField]
+	GameObject leftGoal;
+	[SerializeField]
+	GameObject rightGoal;
+	[SerializeField]
 	PuckController puck;
 
 	StateController state;
@@ -100,11 +104,11 @@ public class GameplayController : SingletonBehaviour<GameplayController>
 
 	void initializeAIPaddle(GameObject paddle, PaddlePosition position)
 	{
-		paddle.AddComponent<AIPaddleController>().Initialize(puck, position);
+		paddle.AddComponent<AIPaddleController>().Initialize(puck, position, leftGoal);
 	}
 
 	void initializePlayerPaddle(GameObject paddle, PaddlePosition position)
 	{
-		paddle.AddComponent<PlayerPaddleController>().Initialize(puck, position);
+		paddle.AddComponent<PlayerPaddleController>().Initialize(puck, position, rightGoal);
 	}
 }

@@ -11,7 +11,10 @@ public class PuckController : PhysicalObjectController
 
     [SerializeField]
     float perpendicularTolerance = 0.01f;
-	
+
+	[SerializeField]
+	float yForceScaler = -100;
+
 	TrailRenderer trail;
 
 	bool hasScored = false;
@@ -146,6 +149,7 @@ public class PuckController : PhysicalObjectController
 	{
 		base.OnCollisionEnter2D(collision);
 		string collisionTag = collision.gameObject.tag;
+		PaddleController paddle;
 		if(PlayerUtil.IsGoalTag(collisionTag))
 		{
 			if(!hasScored)
@@ -153,6 +157,12 @@ public class PuckController : PhysicalObjectController
 				EventControler.Event(collisionTag);
 				hasScored = true;
 			}
+		}
+		else if(paddle = collision.collider.GetComponent<PaddleController>())
+		{
+			float yForce = paddle.GetYPosition() - transform.position.y;
+			yForce *= yForceScaler;
+			rigibody.AddForce(new Vector2(0, yForce));
 		}
 		else
 		{
