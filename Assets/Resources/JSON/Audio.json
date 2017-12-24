@@ -1,0 +1,16 @@
+{
+	"Files": [
+		{
+			"Name":"techno-loop",
+			"Groups":[],
+			"Events":["PlayMusic"],
+			"StopEvents":["StopMusic"],
+			"Loop": true,
+			"Type": "Music",
+			"Channel": 1,
+			"Volume": 100
+		}
+	],
+	"Groups" : [
+	]
+}
