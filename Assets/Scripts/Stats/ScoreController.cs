@@ -14,12 +14,6 @@ public class ScoreController : MonoBehaviourExtended
 		ScoreDisplayer.ResetScores();
 	}
 
-	protected override void Awake()
-	{
-		base.Awake();
-		Init();
-	}
-		
 	protected override void Start()
 	{
 		base.Start();
@@ -27,29 +21,9 @@ public class ScoreController : MonoBehaviourExtended
 		game.OnRestart.Subscribe(ResetScore);
 	}
 
-	protected override void OnDestroy() 
+	protected override void HandleNamedEvent(string eventName)
 	{
-		base.OnDestroy();
-		Unsubscribe();
-	}
-
-	void Init()
-	{
-		Subscribe();
-	}
-
-	void Subscribe()
-	{
-		EventControler.OnNamedEvent += HandleNamedEvent;
-	}
-
-	void Unsubscribe() 
-	{
-		EventControler.OnNamedEvent -= HandleNamedEvent;
-	}
-
-	void HandleNamedEvent(string eventName)
-	{
+		base.HandleNamedEvent(eventName);
 		PaddlePosition scoringPlayer = PlayerUtil.GetOpponent(PlayerUtil.GetPlayerFromGoalTag(eventName));
 		if(scoringPlayer != PaddlePosition.None) 
 		{
@@ -59,7 +33,7 @@ public class ScoreController : MonoBehaviourExtended
 				return;
 			}
 			updateScore(game, scoringPlayer);
-			EventControler.Event(EventList.GOAL);
+			EventController.Event(EventList.GOAL);
 		}
 	}
 

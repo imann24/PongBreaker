@@ -23,12 +23,12 @@ public abstract class MonoBehaviourExtended : MonoBehaviour
 
 	protected virtual void Start()
 	{
-
+		subscribeEvents();
 	}
 
 	protected virtual void OnDestroy()
 	{
-
+		unsubscribeEvents();
 	}
 
 	protected virtual void OnSceneLoad(Scene scene, LoadSceneMode loadMode)
@@ -64,5 +64,20 @@ public abstract class MonoBehaviourExtended : MonoBehaviour
 	protected virtual void OnCollisionEnter2D(Collision2D collision)
 	{
 
+	}
+
+	protected virtual void HandleNamedEvent(string eventName)
+	{
+
+	}
+
+	protected virtual void subscribeEvents()
+	{
+		EventController.OnNamedEvent += HandleNamedEvent;
+	}
+
+	protected virtual void unsubscribeEvents()
+	{
+		EventController.OnNamedEvent -= HandleNamedEvent;
 	}
 }

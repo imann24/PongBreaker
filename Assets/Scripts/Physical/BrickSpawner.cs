@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BrickSpawner : MonoBehaviour 
+public class BrickSpawner : MonoBehaviourExtended 
 {
 	public GameObject BrickPrefab;
 
@@ -9,34 +9,21 @@ public class BrickSpawner : MonoBehaviour
 
 	public Sprite DefaultBrickSprite;
 
-	void Awake()
+	protected override void Awake()
 	{
+		base.Awake();
 		Init();
 	}
 
 	void Init()
 	{
-		Subscribe();
 		GenerateListOfBricks();
 	}
 
-	void OnDestroy()
-	{
-		Unsubscribe();
-	}
-	
-	void Subscribe()
-	{
-		EventControler.OnNamedEvent += HandleNamedEvent;
-	}
 
-	void Unsubscribe() 
+	protected override void HandleNamedEvent(string eventName) 
 	{
-		EventControler.OnNamedEvent -= HandleNamedEvent;
-	}
-
-	void HandleNamedEvent(string eventName) 
-	{
+		base.HandleNamedEvent(eventName);
 		if(eventName == EventList.GOAL) 
 		{
 			StartCoroutine(FillInBricksOnDelay());

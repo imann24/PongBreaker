@@ -44,28 +44,12 @@ public class PuckController : PhysicalObjectController
 
 	void Init() 
 	{
-		Subscribe();
 		SpawnPuck();
 	}
 
-	protected override void OnDestroy()
+	protected override void HandleNamedEvent(string eventName) 
 	{
-		base.OnDestroy();
-		Unsubscribe();
-	}
-
-	void Subscribe()
-	{
-		EventControler.OnNamedEvent += HandleNamedEvent;
-	}
-
-	void Unsubscribe()
-	{
-		EventControler.OnNamedEvent -= HandleNamedEvent;
-	}
-
-	void HandleNamedEvent(string eventName) 
-	{
+		base.HandleNamedEvent(eventName);
 		if(eventName == EventList.GOAL && gameObject.activeInHierarchy)
 		{
 			SpawnPuck(Global.PUCK_RESPAWN_TIME);
@@ -154,7 +138,7 @@ public class PuckController : PhysicalObjectController
 		{
 			if(!hasScored)
 			{
-				EventControler.Event(collisionTag);
+				EventController.Event(collisionTag);
 				hasScored = true;
 			}
 		}
@@ -166,7 +150,7 @@ public class PuckController : PhysicalObjectController
 		}
 		else
 		{
-			EventControler.Event(collisionTag);
+			EventController.Event(collisionTag);
 		}
 	}
 

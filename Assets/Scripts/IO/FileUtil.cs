@@ -1,0 +1,81 @@
+﻿/*
+ * Author(s): Isaiah Mann
+ * Description: Assists in loading and saving persistent files
+ */
+
+using UnityEngine;
+using System.Collections;
+using System.IO;
+
+public static class FileUtil 
+{
+	const string RESOURCES_DIRECTORY = "Resources";
+
+	public static string CreatePath (params string[] directories) {
+		if (directories.Length >= 2) {
+			string path = Path.Combine(directories[0], directories[1]);
+			for (int i = 2; i < directories.Length; i++) {
+				path = Path.Combine(path, directories[i]);
+			}
+			return path;
+		} else if (directories.Length == 1) {
+			return Path.Combine(directories[0], string.Empty);
+		} else {
+			return Path.Combine(string.Empty, string.Empty);
+		}
+	}
+
+	public static string FileText(string path)
+	{
+		string fullFilePath = Path.Combine(RESOURCES_DIRECTORY, path);
+		TextAsset textFile = Resources.Load<TextAsset>(path);
+		if(textFile)
+		{
+			return convertQuotationMarks(
+				Resources.Load<TextAsset>(path).text
+			);
+		}
+		else
+		{
+			throw new FileNotFoundException(string.Format("File not found: {0}. Cannot load text", fullFilePath));
+		}
+	}
+
+	// JSON only accepts the standard quotation marks
+	private static string convertQuotationMarks (string original) {
+		char[] characters = original.ToCharArray();
+		for (int i = 0; i < characters.Length; i++) {
+			if (isIncorrectQuotationMark(characters[i])) {
+				characters[i] = correctQuoatationMark();
+			}
+		}
+
+		return new string(characters);
+
+	}
+
+	static bool isIncorrectQuotationMark (char character) {
+		return (int) character == 8220 ||
+			(int) character == 8221;
+	}
+
+	static char correctQuoatationMark () {
+		return '"';
+	}
+
+	public static void WriteStringToPath (string text, string path) {
+		#if !UNITY_WEBPLAYER
+			File.WriteAllText(path, text);
+		#endif
+	}
+
+	public static void AppendStringToPath (string text, string path) {
+		#if !UNITY_WEBPLAYER
+			File.AppendAllText(path, text);
+		#endif
+	}
+
+	public static bool FileExistsAtPath(string path) {
+		return File.Exists(path);
+	}
+}

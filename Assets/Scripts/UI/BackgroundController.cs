@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BackgroundController : MonoBehaviour {
+public class BackgroundController : MonoBehaviourExtended
+{
 	public Color StandardColor;
 	public Color ScoreColor;
 	public Color BreakColor;
@@ -11,23 +12,26 @@ public class BackgroundController : MonoBehaviour {
 	IEnumerator flashCoroutine;
 
 	// Use this for initialization
-	void Awake () {
+	protected override void Awake()
+	{
+		base.Awake();
 		Init();
 	}
 
-	void Init () {
-		Subscribe();
+	void Init() 
+	{
 		myCamera = GetComponent<Camera>();
 	}
 
-	void OnDestroy () {
-		Unsubscribe();
-	}
-
-	void HandleNamedEvent (string namedEvent) {
-		if (namedEvent == EventList.GOAL) {
+	protected override  void HandleNamedEvent (string namedEvent) 
+	{
+		base.HandleNamedEvent(namedEvent);
+		if(namedEvent == EventList.GOAL) 
+		{
 			CallFlashCoroutine(ScoreColor);
-		} else if (namedEvent == EventList.BRICK_BROKEN) {
+		}
+		else if(namedEvent == EventList.BRICK_BROKEN) 
+		{
 			CallFlashCoroutine(BreakColor);
 		}
 	}
@@ -39,13 +43,6 @@ public class BackgroundController : MonoBehaviour {
 
 		flashCoroutine = FlashColor(color);
 		StartCoroutine(flashCoroutine);
-	}
-	void Subscribe () {
-		EventControler.OnNamedEvent += HandleNamedEvent;
-	}
-
-	void Unsubscribe () {
-		EventControler.OnNamedEvent -= HandleNamedEvent;
 	}
 
 	IEnumerator FlashColor (Color color, float lerpTime = 0.35f, float stayTime = 0.5f) {

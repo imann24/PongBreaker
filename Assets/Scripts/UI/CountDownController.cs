@@ -39,29 +39,15 @@ public class CountDownController : SingletonBehaviour<CountDownController> {
 	{
 		countText = GetComponent<Text>();
 		CountDownFrom();
-		Subscribe();
 	}
 
 	protected override void OnDestroy()
 	{
-		if(isSingleton) 
-		{
-			Unsubscribe();
-		}
 		base.OnDestroy();
 	}
 
-	void Subscribe()
-	{
-		EventControler.OnNamedEvent += HandleNamedEvent;	
-	}
 
-	void Unsubscribe() 
-	{
-		EventControler.OnNamedEvent -= HandleNamedEvent;
-	}
-
-	void HandleNamedEvent(string eventName) 
+	protected override void HandleNamedEvent(string eventName) 
 	{
 		if(eventName == EventList.GOAL && gameObject.activeInHierarchy) 
 		{
