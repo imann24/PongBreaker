@@ -9,8 +9,84 @@
 			"Type": "Music",
 			"Channel": 1,
 			"Volume": 100
+		},
+		{
+			"Name":"puck-hit-0",
+			"Groups":["PuckHit"],
+			"Events":[],
+			"StopEvents":[],
+			"Loop": false,
+			"Type": "FX",
+			"Channel": 2,
+			"Volume": 100
+		},
+		{
+			"Name":"puck-hit-1",
+			"Groups":["PuckHit"],
+			"Events":[],
+			"StopEvents":[],
+			"Loop": false,
+			"Type": "FX",
+			"Channel": 2,
+			"Volume": 100
+		},
+		{
+			"Name":"puck-hit-2",
+			"Groups":["PuckHit"],
+			"Events":[],
+			"StopEvents":[],
+			"Loop": false,
+			"Type": "FX",
+			"Channel": 2,
+			"Volume": 100
+		},
+		{
+			"Name":"puck-hit-3",
+			"Groups":["PuckHit"],
+			"Events":[],
+			"StopEvents":[],
+			"Loop": false,
+			"Type": "FX",
+			"Channel": 2,
+			"Volume": 100
+		},
+		{
+			"Name":"puck-hit-4",
+			"Groups":["PuckHit"],
+			"Events":[],
+			"StopEvents":[],
+			"Loop": false,
+			"Type": "FX",
+			"Channel": 2,
+			"Volume": 100
+		},
+		{
+			"Name":"goal-bell",
+			"Groups":[],
+			"Events":["LeftPlayerGoal", "RightPlayerGoal"],
+			"StopEvents":[],
+			"Loop": false,
+			"Type": "FX",
+			"Channel": 3,
+			"Volume": 100
+		},
+		{
+			"Name":"brick-break",
+			"Groups":[],
+			"Events":["Brick"],
+			"StopEvents":[],
+			"Loop": false,
+			"Type": "FX",
+			"Channel": 2,
+			"Volume": 25
 		}
 	],
 	"Groups" : [
+		{
+			"Name":"PuckHit",
+			"Type":"Random",
+			"Events":["PuckHit"],
+			"StopEvents":[]
+		}
 	]
 }

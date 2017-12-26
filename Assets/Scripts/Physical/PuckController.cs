@@ -3,6 +3,8 @@ using System.Collections;
 
 public class PuckController : PhysicalObjectController 
 {
+	const string PUCK_HIT_EVENT = "PuckHit";
+
 	public bool IsAlive
 	{
 		get;
@@ -129,7 +131,7 @@ public class PuckController : PhysicalObjectController
 		);
 	}
 
-	protected override void OnCollisionEnter2D (Collision2D collision) 
+	protected override void OnCollisionEnter2D(Collision2D collision) 
 	{
 		base.OnCollisionEnter2D(collision);
 		string collisionTag = collision.gameObject.tag;
@@ -144,6 +146,7 @@ public class PuckController : PhysicalObjectController
 		}
 		else if(paddle = collision.collider.GetComponent<PaddleController>())
 		{
+			EventController.Event(PUCK_HIT_EVENT);
 			float yForce = paddle.GetYPosition() - transform.position.y;
 			yForce *= yForceScaler;
 			rigibody.AddForce(new Vector2(0, yForce));

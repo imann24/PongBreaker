@@ -38,6 +38,7 @@ public class BrickController : PhysicalObjectController
 		base.OnCollisionEnter2D(collision);
 		if(collision.gameObject.tag == Global.PUCK) 
 		{
+			EventController.Event(Global.BRICK);
 			Break();
 		}
 	}

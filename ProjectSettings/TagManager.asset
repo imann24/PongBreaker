@@ -7,6 +7,7 @@ TagManager:
   - LeftPlayerGoal
   - RightPlayerGoal
   - Puck
+  - Brick
   layers:
   - Default
   - TransparentFX
