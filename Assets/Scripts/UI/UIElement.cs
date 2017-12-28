@@ -16,15 +16,27 @@ public class UIElement : MonoBehaviourExtended
 		}
 	}
 
+	public bool HasText
+	{
+		get
+		{
+			return text;
+		}
+	}
+
 	[SerializeField]
 	Image imageOverride;
+	[SerializeField]
+	Text textOverride;
 
 	Image image;
+	Text text;
 
 	protected override void Awake()
 	{
 		base.Awake();
 		setImage();
+		setText();
 	}
 
 	void setImage()
@@ -39,11 +51,32 @@ public class UIElement : MonoBehaviourExtended
 		}
 	}
 
+
+	void setText()
+	{
+		if(textOverride)
+		{
+			text = textOverride;
+		}
+		else
+		{
+			text = GetComponentInChildren<Text>();
+		}
+	}
+
 	public void SetImage(Sprite sprite)
 	{
 		if(HasImage)
 		{
 			image.sprite = sprite;
+		}
+	}
+
+	public void SetText(string text)
+	{
+		if(HasText)
+		{
+			this.text.text = text;
 		}
 	}
 }
