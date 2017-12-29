@@ -14,25 +14,29 @@ public class PuckController : PhysicalObjectController
     [SerializeField]
     float perpendicularTolerance = 0.01f;
 
-	[SerializeField]
-	float yForceScaler = -100;
-
+	GameplayController gameplay;
 	TrailRenderer trail;
 
 	bool hasScored = false;
+	bool inGameSpawn = false;
+
+	protected override void Awake()
+	{
+		base.Awake();
+		trail = GetComponent<TrailRenderer>();
+	}
 
 	// Use this for initialization
 	protected override void Start() 
 	{
 		base.Start();
-		trail = GetComponent<TrailRenderer>();
 		Init();
 		Game game = StateController.Instance.CurrentGame;
 		game.OnStart.Subscribe(
 			delegate
 			{
 				gameObject.SetActive(true);
-				SpawnPuck();
+				SpawnPuckFromStart();
 			}
 		);
 		game.OnEnd.Subscribe(
@@ -42,34 +46,46 @@ public class PuckController : PhysicalObjectController
 				gameObject.SetActive(false);
 			}
 		);
+		gameplay = GameplayController.Instance;
+		gameplay.RegisterPuck(this);
+	}
+		
+	protected override void HandleNamedEvent(string eventName)
+	{
+		base.HandleNamedEvent(eventName);
+		if(eventName == Global.GOAL && !hasScored)
+		{
+			// Deactivate all other pucks when there is a goal
+			TogglePuck(active:false);
+			gameObject.SetActive(false);
+			gameplay.DeactivatePuck(this);
+		}
 	}
 
 	void Init() 
 	{
-		SpawnPuck();
-	}
-
-	protected override void HandleNamedEvent(string eventName) 
-	{
-		base.HandleNamedEvent(eventName);
-		if(eventName == EventList.GOAL && gameObject.activeInHierarchy)
+		if(inGameSpawn)
 		{
-			SpawnPuck(Global.PUCK_RESPAWN_TIME);
+			inGameSpawn = false;
+		}
+		else
+		{
+			SpawnPuckFromStart();
 		}
 	}
 
-	void SpawnPuck (float waitTime = Global.PUCK_RESPAWN_TIME) {
+	public void SpawnPuck(Vector2 position)
+	{
+		transform.position = position;
+		TogglePuck(active:true);
+		RandomStartingVelocity();
+		hasScored = false;
+		inGameSpawn = true;
+	}
+
+	void SpawnPuckFromStart(float waitTime = Global.PUCK_RESPAWN_TIME) 
+	{
 		StartCoroutine(TimedSpawnPuck(waitTime));
-	}
-
-	public float GetYPosition()
-	{
-		return transform.localPosition.y;
-	}
-
-	public float GetXPosition()
-	{
-		return transform.localPosition.x;
 	}
 
 	public void TogglePuck(bool active) 
@@ -140,16 +156,18 @@ public class PuckController : PhysicalObjectController
 		{
 			if(!hasScored)
 			{
-				EventController.Event(collisionTag);
 				hasScored = true;
+				if(gameObject.activeInHierarchy)
+				{
+					SpawnPuckFromStart(Global.PUCK_RESPAWN_TIME);
+				}
+				EventController.Event(collisionTag);
 			}
 		}
 		else if(paddle = collision.collider.GetComponent<PaddleController>())
 		{
+			gameplay.RegisterPlayerHit(paddle);
 			EventController.Event(PUCK_HIT_EVENT);
-			float yForce = paddle.GetYPosition() - transform.position.y;
-			yForce *= yForceScaler;
-			rigibody.AddForce(new Vector2(0, yForce));
 		}
 		else
 		{
