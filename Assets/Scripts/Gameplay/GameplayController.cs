@@ -3,10 +3,17 @@
  * Description: Handles gameplay logic
  */
 
+using System.Collections.Generic;
+
 using UnityEngine;
 
 public class GameplayController : SingletonBehaviour<GameplayController>
 {
+	[SerializeField]
+	PuckController puckPrefab;
+	[SerializeField]
+	Transform puckParent;
+
 	[SerializeField]
 	GameObject leftPaddle;
 	[SerializeField]
@@ -19,12 +26,17 @@ public class GameplayController : SingletonBehaviour<GameplayController>
 	PuckController puck;
 
 	StateController state;
+	PowerUpController powerUp;
 	Game game;
+	PaddlePosition lastPlayerHit = PaddlePosition.None;
+	List<PuckController> allPucks = new List<PuckController>();
+	List<PuckController> livePucks = new List<PuckController>();
 
 	protected override void Start()
 	{
 		base.Start();
 		state = StateController.Instance;
+		powerUp = PowerUpController.Instance;
 		initialize(state.CurrentGame);
 	}
 
@@ -38,6 +50,88 @@ public class GameplayController : SingletonBehaviour<GameplayController>
 		resumeTime();
 	}
 
+	public List<PuckController> GetLivePucks()
+	{
+		return new List<PuckController>(livePucks);
+	}
+
+	public void RegisterPuck(PuckController puck)
+	{
+		allPucks.Add(puck);
+		livePucks.Add(puck);
+	}
+
+	public void DeactivatePuck(PuckController puck)
+	{
+		livePucks.Remove(puck);
+	}
+
+	public List<PuckController> SpawnPucks(Vector2 position, int count)
+	{
+		List<PuckController> pucks = getPucksToSpawn(count);
+		foreach(PuckController puck in pucks)
+		{
+			puck.SpawnPuck(position);
+		}
+		return pucks;
+	}
+
+	List<PuckController> getPucksToSpawn(int count)
+	{
+		List<PuckController> spawnPucks = getSparePucks();
+		if(spawnPucks.Count >= count)
+		{
+			return spawnPucks.GetRange(0, count);
+		}
+		int difference = count - spawnPucks.Count;
+		for(int i = 0; i < difference; i++)
+		{
+			PuckController puck = Instantiate(puckPrefab, puckParent);
+			allPucks.Add(puck);
+			spawnPucks.Add(puck);
+		}
+		return spawnPucks;
+	}
+
+	List<PuckController> getSparePucks()
+	{
+		return allPucks.FindAll(puck => !puck.IsAlive);
+	}
+		
+	bool puckIsAlive(PuckController puck)
+	{
+		return puck.IsAlive;
+	}
+
+	public void RegisterPlayerHit(PaddleController paddle)
+	{
+		lastPlayerHit = paddle.PaddlePosition;
+	}
+		
+	public void HandleBrickDestroyed(BrickController brick)
+	{
+		if(shouldSpawnPowerUp(brick))
+		{
+			powerUp.SpawnPowerUp(brick, lastPlayerHit);
+		}
+	}
+
+	protected override void HandleNamedEvent(string eventName)
+	{
+		base.HandleNamedEvent(eventName);
+		if(eventName.Contains(Global.GOAL))
+		{
+			lastPlayerHit = PaddlePosition.None;
+		}
+	}
+
+	bool shouldSpawnPowerUp(BrickController brick)
+	{
+		return lastPlayerHit != PaddlePosition.None && 
+			brick.CanSpawnPowerUps && 
+			powerUp.ShouldSpawnPowerUp();
+	}
+		
 	void initialize(Game game)
 	{
 		this.game = game;

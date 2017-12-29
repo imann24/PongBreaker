@@ -11,14 +11,27 @@ public class BrickController : PhysicalObjectController
 		}
 	}
 
+	public bool CanSpawnPowerUps
+	{
+		get
+		{
+			return canSpawnPowerUps;
+		}
+	}
+
+	GameplayController game;
 	Animator animator;
 	SpriteRenderer sRenderer;
+	[SerializeField]
+	bool canSpawnPowerUps = true;
+	bool isBreaking = false;
 
 	public void Spawn(Sprite sprite)
 	{
 		gameObject.SetActive(true);
 		animator.enabled = false;
 		sRenderer.sprite = sprite;
+		isBreaking = false;
 	}
 
 	protected override void Start()
@@ -31,15 +44,18 @@ public class BrickController : PhysicalObjectController
 	{
 		animator = GetComponent<Animator>();
 		sRenderer = GetComponent<SpriteRenderer>();
+		game = GameplayController.Instance;
 	}
 
 	protected override void OnCollisionEnter2D(Collision2D collision) 
 	{
 		base.OnCollisionEnter2D(collision);
-		if(collision.gameObject.tag == Global.PUCK) 
+		if(!isBreaking && collision.gameObject.tag == Global.PUCK) 
 		{
 			EventController.Event(Global.BRICK);
 			Break();
+			game.HandleBrickDestroyed(this);
+			isBreaking = true;
 		}
 	}
 
