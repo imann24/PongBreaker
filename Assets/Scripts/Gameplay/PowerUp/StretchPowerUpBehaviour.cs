@@ -1,0 +1,17 @@
+﻿/*
+ * Author: Isaiah Mann
+ * Description: Power Up which makes the paddle wider than usual
+ */
+
+using UnityEngine;
+
+public class StretchPowerUpBehaviour : PowerUpBehaviour
+{
+	[SerializeField]
+	float scaleFactor = 2.0f;
+
+	public override void Use(PaddleController player)
+	{
+		base.Use(player);
+	}
+}

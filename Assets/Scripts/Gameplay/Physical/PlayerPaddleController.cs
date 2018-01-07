@@ -40,7 +40,7 @@ public class PlayerPaddleController : PaddleController
 		
 	void updateVelocity()
 	{
-		float speed = Input.GetAxis(PlayerUtil.IDToString(paddlePosition)) * this.speed;
+		float speed = Input.GetAxis(PlayerUtil.IDToString(PaddlePosition)) * this.speed;
 		rigibody.velocity = new Vector2(NONE_VALUE, speed);
 		if(mouseIsDown)
 		{

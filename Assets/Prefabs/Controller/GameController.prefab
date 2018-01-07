@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 114393102500102128}
   - component: {fileID: 114070512888324636}
   - component: {fileID: 114808962928167916}
+  - component: {fileID: 114281845478552032}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -53,6 +54,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c25fc2c2a4aec4a4bb4a67a33bcb4252, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114281845478552032
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1853430331321340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84091c95ba31447a2bae3a8a78c8dc29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  preserveOnSceneLoad: 0
+  powerUpParent: {fileID: 0}
+  percentChanceSpawnPowerUp: 1
+  powerUpPrefabs:
+  - {fileID: 1492949203253300, guid: ca232f79a4c2a43e3b9824c4656e13ed, type: 2}
+  - {fileID: 1884058155209964, guid: 683bd150d1e8b43169c1927ed2a8fa64, type: 2}
+  - {fileID: 1877352122216192, guid: 5e4370fea041c4968888c58a40ec6af2, type: 2}
 --- !u!114 &114393102500102128
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -76,6 +95,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   preserveOnSceneLoad: 0
+  puckPrefab: {fileID: 11482724, guid: 83a877b6b1ad244fa95457d946862c20, type: 2}
+  puckParent: {fileID: 0}
   leftPaddle: {fileID: 0}
   rightPaddle: {fileID: 0}
+  leftGoal: {fileID: 0}
+  rightGoal: {fileID: 0}
   puck: {fileID: 0}
