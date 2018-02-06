@@ -1,10 +1,33 @@
 ﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class PhysicalObjectController : MonoBehaviourExtended
 {
+	public float ScaleX
+	{
+		get
+		{
+			return transform.localScale.x;
+		}
+		set
+		{
+			Vector3 current = transform.localScale;
+			if(scalingCoroutine != null)
+			{
+				StopCoroutine(scalingCoroutine);
+			}
+			StartCoroutine(scalingCoroutine = scaleOverTime(new Vector3(value, current.y, current.z), defaultTimeToScale));
+		}
+	}
+
 	protected Rigidbody2D rigibody;
 	protected SpriteRenderer sprite;
+
+
+	[SerializeField]
+	float defaultTimeToScale = 1.75f;
+	IEnumerator scalingCoroutine;
 
 	// Use this for initialization
 	protected override void Awake() 
@@ -57,6 +80,19 @@ public class PhysicalObjectController : MonoBehaviourExtended
 		}
 		match = null;
 		return false;
+	}
+
+	IEnumerator scaleOverTime(Vector3 targetScale, float timeToScale)
+	{
+		float timer = 0;
+		Vector3 startingScale = transform.localScale;
+		while(timer <= timeToScale)
+		{
+			transform.localScale = Vector3.Lerp(startingScale, targetScale, timer / timeToScale);
+			yield return new WaitForEndOfFrame();
+			timer += Time.deltaTime;
+		}
+		transform.localScale = targetScale;
 	}
 
 	void setReferences()

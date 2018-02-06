@@ -700,6 +700,10 @@ Prefab:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6173808, guid: cbabadb7de9644dae8ea315e242f00f3, type: 2}
+      propertyPath: m_UsedByComposite
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11445616, guid: cbabadb7de9644dae8ea315e242f00f3, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: cbabadb7de9644dae8ea315e242f00f3, type: 2}
