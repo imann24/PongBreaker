@@ -99,10 +99,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d00b9c3ada7e41cfb76cf54f90687b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 1
-  spawnWeight: 0
+  defaultTimeToScale: 1
+  duration: 5
+  spawnWeight: 1
   travelSpeed: 2
-  scaleFactor: 2
+  scaleFactor: 3
 --- !u!212 &212073816076119098
 SpriteRenderer:
   m_ObjectHideFlags: 1
