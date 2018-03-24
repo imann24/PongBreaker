@@ -28,8 +28,9 @@ public class AIPaddleController : PaddleController
 		powerUps = PowerUpController.Instance;
 	}
 
-	void Update()
+	protected override void Update()
 	{
+		base.Update();
 		if(game.Running)
 		{
 			followHighestPriorityObject();

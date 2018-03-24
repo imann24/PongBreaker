@@ -24,6 +24,7 @@ public class PhysicalObjectController : MonoBehaviourExtended
 	protected Rigidbody2D rigibody;
 	protected SpriteRenderer sprite;
 
+	Dictionary<PhysicalObjectController, Transform> originalParents = new Dictionary<PhysicalObjectController, Transform>();
 
 	[SerializeField]
 	float defaultTimeToScale = 1.75f;
@@ -60,6 +61,32 @@ public class PhysicalObjectController : MonoBehaviourExtended
 		else
 		{
 			return PaddlePosition.None;
+		}
+	}
+
+	public virtual void Attach(PhysicalObjectController objectToAttach) 
+	{
+		originalParents[objectToAttach] = objectToAttach.transform.parent;
+		objectToAttach.transform.SetParent(transform);
+		objectToAttach.transform.localPosition = Vector3.zero;
+	}
+
+	public virtual void Detach(PhysicalObjectController objectToDetach)
+	{
+		Transform originalTransform;
+		if(originalParents.TryGetValue(objectToDetach, out originalTransform))
+		{
+			objectToDetach.transform.SetParent(originalTransform);
+			originalParents.Remove(objectToDetach);
+		}
+	}
+
+	protected void detachAll()
+	{
+		List<PhysicalObjectController> objectListToDetach = new List<PhysicalObjectController>(originalParents.Keys);
+		foreach(PhysicalObjectController objectToDetach in objectListToDetach)
+		{
+			Detach(objectToDetach);
 		}
 	}
 

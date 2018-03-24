@@ -96,6 +96,18 @@ public class PuckController : PhysicalObjectController
 		IsAlive = active;
 	}
 
+
+	public void StartMotion()
+	{
+		rigibody.isKinematic = false;
+	}
+
+	public void StopMotion()
+	{
+		rigibody.isKinematic = true;
+		rigibody.velocity = Vector2.zero;
+	}
+
 	IEnumerator TimedSpawnPuck(float waitTime = 0) 
 	{
 		TogglePuck(false);

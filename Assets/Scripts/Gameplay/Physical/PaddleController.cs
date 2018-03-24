@@ -2,6 +2,8 @@
 
 public class PaddleController : PhysicalObjectController 
 {
+	float objectDetachSpeed = 1.0f;
+
 	public PuckController ClosestPuck
 	{
 		get
@@ -40,10 +42,18 @@ public class PaddleController : PhysicalObjectController
 
 	}
 
-	protected override void OnDestroy()
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        gameplay.UnregisterPlayer(this);
+    }
+
+	protected virtual void Update()
 	{
-		base.OnDestroy();
-		gameplay.UnregisterPlayer(this);
+		if(Input.GetKeyDown(KeyCode.Space))
+		{
+			detachAll();
+		}
 	}
 
 	public void Initialize(PuckController puck, PaddlePosition paddlePosition, GameObject myGoal)
@@ -56,6 +66,49 @@ public class PaddleController : PhysicalObjectController
 	public override string ToString ()
 	{
 		return string.Format("[PaddleController: {0}]", PaddlePosition);
+	}
+
+	public override void Attach(PhysicalObjectController objectToAttach)
+	{
+		base.Attach(objectToAttach);
+		switch(PaddlePosition)
+		{
+			case PaddlePosition.Left:
+				objectToAttach.transform.position += Vector3.right;
+				break;
+			case PaddlePosition.Right:
+				objectToAttach.transform.position += Vector3.left;
+				break;
+		}
+	}
+
+	public void SetObjectDetachSpeed(float objectDetachSpeed)
+	{
+		this.objectDetachSpeed = objectDetachSpeed;
+	}
+
+	public override void Detach(PhysicalObjectController objectToDetach)
+	{
+		base.Detach(objectToDetach);
+		Rigidbody2D detachedObjectRigibody = objectToDetach.GetComponent<Rigidbody2D>();
+		detachedObjectRigibody.rotation = 0;
+		if(objectToDetach is PuckController)
+		{
+			(objectToDetach as PuckController).StartMotion();
+		}
+		if(!detachedObjectRigibody)
+		{
+			return;
+		}
+		switch(PaddlePosition)
+		{
+			case PaddlePosition.Left:
+				detachedObjectRigibody.AddForce(Vector2.right * objectDetachSpeed);
+				break;
+			case PaddlePosition.Right:
+				detachedObjectRigibody.AddForce(Vector2.left * objectDetachSpeed);
+				break;
+		}
 	}
 
 	void resetPosition()
