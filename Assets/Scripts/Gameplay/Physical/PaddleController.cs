@@ -36,7 +36,14 @@ public class PaddleController : PhysicalObjectController
 		base.Start();
 		StateController.Instance.CurrentGame.OnRestart.Subscribe(resetPosition);
 		gameplay = GameplayController.Instance;
+		gameplay.RegisterPlayer(this);
 
+	}
+
+	protected override void OnDestroy()
+	{
+		base.OnDestroy();
+		gameplay.UnregisterPlayer(this);
 	}
 
 	public void Initialize(PuckController puck, PaddlePosition paddlePosition, GameObject myGoal)

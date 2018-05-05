@@ -4,20 +4,29 @@
  */
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using UnityEngine;
 
 public class PowerUpController : SingletonBehaviour<PowerUpController>
 {
+    public List<PowerUpBehaviour> GetPowerUpTemplates
+    {
+        get
+        {
+            return powerUpPrefabs.Select(prefab => prefab.GetComponent<PowerUpBehaviour>()).ToList<PowerUpBehaviour>();
+        }
+    }
+
 	[SerializeField]
-	Transform powerUpParent;
+    Transform powerUpParent = null;
 
 	[SerializeField]
 	float percentChanceSpawnPowerUp = 0.15f;
 
 	[SerializeField]
-	GameObject[] powerUpPrefabs;
+	GameObject[] powerUpPrefabs = null;
 
 	WeightedRandomBuffer<PowerUpBehaviour> powerUpBuffer;
 
@@ -78,6 +87,12 @@ public class PowerUpController : SingletonBehaviour<PowerUpController>
 		livePowerUps.Remove(powerUp);
 		powerUps.Push(powerUp);
 	}
+
+    public void ActivatePowerUp(PowerUpBehaviour powerUpPrefab, PaddleController player)
+    {
+        PowerUpBehaviour powerUpInstance = Instantiate(powerUpPrefab);
+        powerUpInstance.Use(player);
+    }
 
 	public HashSet<PowerUpBehaviour> GetLivePowerUps()
 	{
