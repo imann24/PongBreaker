@@ -36,6 +36,13 @@ public abstract class PowerUpBehaviour : PhysicalObjectController
 		controller.AddToSpawnPool(this);
 	}
 
+	protected override void OnEnable()
+	{
+        base.OnEnable();
+        Awake();
+        Start();
+	}
+
 	protected override void Awake()
 	{
 		base.Awake();

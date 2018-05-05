@@ -9,6 +9,14 @@ using UnityEngine;
 
 public class GameplayController : SingletonBehaviour<GameplayController>
 {
+	public List<PaddleController> GetRegisteredPlayers
+	{
+		get
+		{
+			return paddles;
+		}
+	}
+
 	[SerializeField]
 	PuckController puckPrefab;
 	[SerializeField]
@@ -31,6 +39,7 @@ public class GameplayController : SingletonBehaviour<GameplayController>
 	PaddlePosition lastPlayerHit = PaddlePosition.None;
 	List<PuckController> allPucks = new List<PuckController>();
 	List<PuckController> livePucks = new List<PuckController>();
+	List<PaddleController> paddles = new List<PaddleController>();
 
 	protected override void Start()
 	{
@@ -53,6 +62,16 @@ public class GameplayController : SingletonBehaviour<GameplayController>
 	public List<PuckController> GetLivePucks()
 	{
 		return new List<PuckController>(livePucks);
+	}
+
+	public void RegisterPlayer(PaddleController paddle)
+	{
+		paddles.Add(paddle);
+	}
+
+	public void UnregisterPlayer(PaddleController paddle)
+	{
+		paddles.Remove(paddle);
 	}
 
 	public void RegisterPuck(PuckController puck)
