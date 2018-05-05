@@ -16,6 +16,11 @@ public abstract class MonoBehaviourExtended : MonoBehaviour
 		}
 	}
 		
+    protected virtual void OnEnable()
+    {
+        // NOTHING
+    }
+
 	protected virtual void Awake()
 	{
 		SceneManager.sceneLoaded += OnSceneLoad;
