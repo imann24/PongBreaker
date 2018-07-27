@@ -67,7 +67,7 @@ public class PhysicalObjectController : MonoBehaviourExtended
 	public virtual void Attach(PhysicalObjectController objectToAttach) 
 	{
 		originalParents[objectToAttach] = objectToAttach.transform.parent;
-		objectToAttach.transform.SetParent(transform);
+        objectToAttach.transform.SetParent(getTransformToAttach());
 		objectToAttach.transform.localPosition = Vector3.zero;
 	}
 
@@ -80,6 +80,11 @@ public class PhysicalObjectController : MonoBehaviourExtended
 			originalParents.Remove(objectToDetach);
 		}
 	}
+
+    protected virtual Transform getTransformToAttach() 
+    {
+        return transform;
+    }
 
 	protected void detachAll()
 	{

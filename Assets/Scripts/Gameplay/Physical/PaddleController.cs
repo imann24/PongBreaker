@@ -26,11 +26,13 @@ public class PaddleController : PhysicalObjectController
 
 	Vector3 startingPosition;
 	GameplayController gameplay;
+    Attacher attacher;
 
 	protected override void Awake()
 	{
 		base.Awake();
 		startingPosition = transform.position;
+        attacher = GetComponentInChildren<Attacher>();
 	}
 
 	protected override void Start()
@@ -80,6 +82,11 @@ public class PaddleController : PhysicalObjectController
 				objectToAttach.transform.position += Vector3.left;
 				break;
 		}
+	}
+
+	protected override Transform getTransformToAttach()
+	{
+        return attacher.transform;
 	}
 
 	public void SetObjectDetachSpeed(float objectDetachSpeed)
