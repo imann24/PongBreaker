@@ -86,7 +86,7 @@ public class PaddleController : PhysicalObjectController
 
 	protected override Transform getTransformToAttach()
 	{
-        return attacher.transform;
+        return transform;
 	}
 
 	public void SetObjectDetachSpeed(float objectDetachSpeed)
