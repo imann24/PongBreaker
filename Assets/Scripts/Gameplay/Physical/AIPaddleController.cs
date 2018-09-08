@@ -3,6 +3,7 @@
  * Description: AI behaviour of paddle
  */
 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -20,8 +21,17 @@ public class AIPaddleController : PaddleController
 	float slowdown = 0.8f;
 	[SerializeField]
 	float inRange = 6.25f;
+    [SerializeField]
+    Vector2 stickPowerUpRangeTimeRange = new Vector2(1, 2);
+    PaddleController opponent;
 
-	protected override void Start()
+    public override void Attach(PhysicalObjectController objectToAttach)
+    {
+        base.Attach(objectToAttach);
+        StartCoroutine(detachOnDelay());
+    }
+
+    protected override void Start()
 	{
 		base.Start();
 		game = StateController.Instance.CurrentGame;
@@ -33,9 +43,29 @@ public class AIPaddleController : PaddleController
 		base.Update();
 		if(game.Running)
 		{
-			followHighestPriorityObject();
-		}
+            if(hasPuckAttached)
+            {
+                followHighestPriorityObject();
+            }
+            else
+            {
+                avoidOpponent();
+            }
+            executeMovement();
+        }
 	}
+
+    void avoidOpponent() 
+    {
+        if(opponent == null && (opponent = gameplay.GetOpponent(this)) == null)
+        {
+            Debug.LogErrorFormat("Paddle {0} cannot find opponent", this);
+        }
+        // TODO: Need Side Bounds for Board
+        // TODO: If opponent is more left, move right
+        // TODO: If opponent is more right, move left
+
+    }
 
 	void followHighestPriorityObject()
 	{
@@ -54,13 +84,17 @@ public class AIPaddleController : PaddleController
 	void followObject(PhysicalObjectController physicalObject)
 	{
 		travelPositions.Enqueue(physicalObject.GetYPosition());
-		if(travelPositions.Count > dampening)
-		{
-			Vector3 position = transform.localPosition;	
-			position.y = Mathf.Lerp(travelPositions.Dequeue(), position.y, slowdown);
-			transform.localPosition = position;
-		}
 	}
+
+    void executeMovement()
+    {
+        if (travelPositions.Count > dampening)
+        {
+            Vector3 position = transform.localPosition;
+            position.y = Mathf.Lerp(travelPositions.Dequeue(), position.y, slowdown);
+            transform.localPosition = position;
+        }
+    }
 
 	bool shouldFollowPuck(PuckController puck)
 	{
@@ -94,4 +128,10 @@ public class AIPaddleController : PaddleController
 			return false;
 		}
 	}
+
+    IEnumerator detachOnDelay() 
+    {
+        yield return new WaitForSeconds(Random.Range(stickPowerUpRangeTimeRange.x, stickPowerUpRangeTimeRange.y));
+        detachAll();
+    }
 }

@@ -2,7 +2,7 @@
 
 public class PaddleController : PhysicalObjectController 
 {
-	float objectDetachSpeed = 1.0f;
+	float objectDetachSpeed = 30.0f;
 
 	public PuckController ClosestPuck
 	{
@@ -24,8 +24,10 @@ public class PaddleController : PhysicalObjectController
 		private set;
 	}
 
+    protected bool hasPuckAttached = false;
+
 	Vector3 startingPosition;
-	GameplayController gameplay;
+	protected GameplayController gameplay;
     Attacher attacher;
 
 	protected override void Awake()
@@ -82,6 +84,10 @@ public class PaddleController : PhysicalObjectController
 				objectToAttach.transform.position += Vector3.left;
 				break;
 		}
+        if(objectToAttach is PuckController)
+        {
+            hasPuckAttached = true;
+        }
 	}
 
 	protected override Transform getTransformToAttach()
@@ -102,6 +108,7 @@ public class PaddleController : PhysicalObjectController
 		if(objectToDetach is PuckController)
 		{
 			(objectToDetach as PuckController).StartMotion();
+            hasPuckAttached = false;
 		}
 		if(!detachedObjectRigibody)
 		{
@@ -110,10 +117,10 @@ public class PaddleController : PhysicalObjectController
 		switch(PaddlePosition)
 		{
 			case PaddlePosition.Left:
-				detachedObjectRigibody.AddForce(Vector2.right * objectDetachSpeed);
+                detachedObjectRigibody.velocity += Vector2.right * objectDetachSpeed;
 				break;
 			case PaddlePosition.Right:
-				detachedObjectRigibody.AddForce(Vector2.left * objectDetachSpeed);
+                detachedObjectRigibody.velocity += Vector2.left * objectDetachSpeed;
 				break;
 		}
 	}

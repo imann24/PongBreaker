@@ -40,8 +40,10 @@ public class GameplayController : SingletonBehaviour<GameplayController>
 	List<PuckController> allPucks = new List<PuckController>();
 	List<PuckController> livePucks = new List<PuckController>();
 	List<PaddleController> paddles = new List<PaddleController>();
+    Dictionary<PhysicalObjectType, List<Vector2>> recordedPositions = new Dictionary<PhysicalObjectType, List<Vector2>>();
+    Rect boardBounds = new Rect();
 
-	protected override void Start()
+    protected override void Start()
 	{
 		base.Start();
 		state = StateController.Instance;
@@ -94,6 +96,39 @@ public class GameplayController : SingletonBehaviour<GameplayController>
 		}
 		return pucks;
 	}
+
+    public PaddleController GetOpponent(PaddleController paddle)
+    {
+        return paddles.Find((PaddleController compare) => compare != paddle);
+    }
+
+    public void RecordPosition(Vector2 position, PhysicalObjectType objectType) 
+    {
+        List<Vector2> positions;
+        if(!recordedPositions.TryGetValue(objectType, out positions))
+        {
+            positions = new List<Vector2>();
+            recordedPositions.Add(objectType, positions);
+        }
+        positions.Add(position);
+        updateLogicFromRecordedPositions();
+    }
+
+    void updateLogicFromRecordedPositions()
+    {
+        List<Vector2> positions;
+        if (recordedPositions.TryGetValue(PhysicalObjectType.Bound, out positions) && 
+            positions.Count == 4) {
+            float xMin = float.MaxValue;
+            float yMin = float.MaxValue;
+            float xMax = float.MinValue;
+            float yMax = float.MinValue;
+            foreach(Vector2 pos in positions)
+            {
+                // TODO: Finish bounds
+            }
+        }
+    }
 
 	List<PuckController> getPucksToSpawn(int count)
 	{
